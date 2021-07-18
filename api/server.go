@@ -10,12 +10,26 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// INITIALIZATION ////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+// Custom Server type
 type APIServer struct {
 	Echo *echo.Echo
 }
 
+// Custom Handler type
 type Handler = func(e echo.Context) error
 
+// Create a custom function for grouping
+type ControllerFunc func(g *echo.Group) error
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+// Init a server
 func InitServer() *APIServer {
 	server := &APIServer{Echo: echo.New()}
 	server.Echo.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -24,10 +38,12 @@ func InitServer() *APIServer {
 	return server
 }
 
+// Start server
 func (server *APIServer) Start(port string) {
 	server.Echo.Start(port)
 }
 
+// Handle methods
 func (server *APIServer) SerHandler(method *enum.MethodValue, path string, h Handler) error {
 	switch method.Value {
 		case enum.APIMethod.GET.Value:
@@ -41,8 +57,6 @@ func (server *APIServer) SerHandler(method *enum.MethodValue, path string, h Han
 	}
 	return nil
 }
-
-type ControllerFunc func(g *echo.Group) error
 
 func (server *APIServer) SetGroup(group string, cf ControllerFunc) {
 	g := server.Echo.Group(group)
