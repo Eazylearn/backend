@@ -21,12 +21,15 @@ func main() {
 	DB_URI := os.Getenv("DB_URI")
 	AppDB := db.CreateUniversalDB(DB_URI, "app")
 	onDBConnected(AppDB)
+	createPath(server)
+	server.Start(":8081")
+}
 
+// Create path
+func createPath(server *api.APIServer) {
 	server.SetGroup("/", controller.RootControllerGroup)
 	server.SetGroup("/user", controller.UserControllerGroup)
 	server.SetGroup("/test", controller.TestControllerGroup)
-	
-	server.Start(":8081")
 }
 
 
