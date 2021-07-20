@@ -16,7 +16,6 @@ import (
 
 func main() {
 	server := api.InitServer()
-
 	godotenv.Load(".env")
 	DB_URI := os.Getenv("DB_URI")
 	AppDB := db.CreateUniversalDB(DB_URI, "app")

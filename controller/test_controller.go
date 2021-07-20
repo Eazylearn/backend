@@ -24,3 +24,9 @@ func TestPage(c echo.Context) error {
 	})
 	return nil
 }
+
+// Create a test
+func CreateTestAction(c echo.Context) error {
+
+	return nil
+}
