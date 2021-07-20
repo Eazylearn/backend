@@ -11,7 +11,7 @@ import (
 
 type User struct {
 	// Basic information
-	ID        int64  `json:"id,omitempty"`
+	UserID        int64  `json:"userId,omitempty"`
 	FirstName string `json:"firstName,omitempty"`
 	LastName  string `json:"lastName,omitempty"`
 
