@@ -12,8 +12,9 @@ import (
 
 // ********** Main function for managing path ********** //
 func TopicControllerGroup(g *echo.Group) error {
-	g.GET("/", TopicPage)
-	g.GET("/topic", CreateTopicAction)
+	g.GET("", TopicPage)
+	g.GET("/CreateTopic", CreateTopicAction)
+	// g.GET("/CreateTopics", CreateTopicsAction)
 	return nil
 }
 
@@ -28,7 +29,7 @@ func TopicPage(c echo.Context) error {
 	return nil
 }
 
-// Create a test
+// Create a topic
 func CreateTopicAction(c echo.Context) error {
 	var body model.Topic
 	err := api.GetContent(c, &body)
@@ -47,3 +48,23 @@ func CreateTopicAction(c echo.Context) error {
 	}
 	return nil
 }
+
+// // Create many topics
+// func CreateTopicsAction(c echo.Context) error {
+// 	var body model.Topic
+// 	err := api.GetContent(c, &body)
+// 	if err != nil {
+// 		return api.Respond(c, &enum.APIResponse{
+// 			Status: enum.APIStatus.Invalid,
+// 			Message: "topic_controller.go/CreateTopicAction: Can not parse input data",
+// 		})
+// 	}
+// 	insertErr := repo.CreateTopic(body)
+// 	if insertErr != nil {
+// 		return api.Respond(c, &enum.APIResponse{
+// 			Status: enum.APIStatus.Error,
+// 			Message: fmt.Sprintf("topic_controller.go/CreateTopicAction: Error inserting topic %s", insertErr.Error()),
+// 		})
+// 	}
+// 	return nil
+// }

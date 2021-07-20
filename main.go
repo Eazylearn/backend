@@ -29,6 +29,7 @@ func createPath(server *api.APIServer) {
 	server.SetGroup("/", controller.RootControllerGroup)
 	server.SetGroup("/user", controller.UserControllerGroup)
 	server.SetGroup("/test", controller.TestControllerGroup)
+	server.SetGroup("/topic", controller.TopicControllerGroup)
 }
 
 
