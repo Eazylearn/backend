@@ -11,18 +11,18 @@ import (
 
 type User struct {
 	// Basic information
-	UserID        int64  `json:"userId,omitempty"`
+	UserID    int64  `json:"userId,omitempty"`
 	FirstName string `json:"firstName,omitempty"`
 	LastName  string `json:"lastName,omitempty"`
 
 	// Relative information
-	Dob *time.Time `json:"dob,omitempty"`
-	Email string `json:"email,omitempty"`
-	Address string `json:"address,omitempty"`
-	Phone string `json:"phone,omitempty"`
+	Dob     *time.Time `json:"dob,omitempty"`
+	Email   string     `json:"email,omitempty"`
+	Address string     `json:"address,omitempty"`
+	Phone   string     `json:"phone,omitempty"`
 
 	// Account and password
-	Account string `json:"account,omitempty"`
+	Account  string `json:"account,omitempty"`
 	Password string `json:"password,omitempty"`
 }
 

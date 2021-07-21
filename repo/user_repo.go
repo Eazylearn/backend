@@ -29,7 +29,7 @@ func CreateUser(user model.User) error {
 }
 
 // Return user by id
-func FindUserByID(id int) (model.User, error) {
+func GetUserByID(id int64) (model.User, error) {
 	var user model.User
 	result, qErr := model.UserDB.Collection.Find(context.TODO(), bson.M{})
 	if qErr != nil {
@@ -43,4 +43,18 @@ func FindUserByID(id int) (model.User, error) {
 		return user, err
 	}
 	return user, nil
+}
+
+// Return all users by first name
+func GetUserByFirstname(firstName string) ([]model.User, error) {
+	list := make([]model.User, 0)
+	result := model.UserDB.Collection.FindOne(context.TODO(), bson.M{"firstName": firstName})
+	var user model.User
+	err := result.Decode(&user)
+	if err != nil {
+		log.Println("user_repo/GetUserByFirstname: ", err.Error())
+		return list, err
+	}
+	list = append(list, user)
+	return list, nil
 }
