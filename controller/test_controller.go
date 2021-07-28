@@ -3,10 +3,10 @@ package controller
 import (
 	"fmt"
 
-	"github.com/Cumbercubie/api"
-	"github.com/Cumbercubie/enum"
-	"github.com/Cumbercubie/model"
-	"github.com/Cumbercubie/repo"
+	"github.com/CS426FinalProject/api"
+	"github.com/CS426FinalProject/enum"
+	"github.com/CS426FinalProject/model"
+	"github.com/CS426FinalProject/repo"
 	"github.com/labstack/echo/v4"
 )
 
