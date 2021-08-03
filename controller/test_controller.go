@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/CS426FinalProject/api"
 	"github.com/CS426FinalProject/enum"
@@ -12,7 +13,8 @@ import (
 
 // ********** Main function for managing path ********** //
 func TestControllerGroup(g *echo.Group) error {
-	g.GET("/", TestPage)
+	//g.GET("/", TestPage)
+	g.GET("/", GetTestByIDAction)
 	return nil
 }
 
@@ -47,4 +49,29 @@ func CreateTestAction(c echo.Context) error {
 	}
 	return nil
 
+}
+func GetTestByIDAction(c echo.Context) error {
+	id := c.QueryParams().Get("id")
+	if id == "" {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: fmt.Sprintln("test_controller/GetTestByIDAction: Empty ID"),
+		})
+		return nil
+	}
+	testID, _ := strconv.ParseInt(id, 10, 64)
+	test, err := repo.GetTestByID(testID)
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf(err.Error()),
+		})
+		return nil
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Message: fmt.Sprintln("Success"),
+		Data:    test,
+	})
+	return nil
 }
