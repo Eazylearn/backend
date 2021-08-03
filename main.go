@@ -6,6 +6,7 @@ import (
 	"github.com/CS426FinalProject/api"
 	"github.com/CS426FinalProject/controller"
 	"github.com/CS426FinalProject/db"
+
 	// "github.com/CS426FinalProject/enum"
 	"github.com/CS426FinalProject/model"
 	// "github.com/CS426FinalProject/repo"
@@ -32,7 +33,6 @@ func createPath(server *api.APIServer) {
 	server.SetGroup("/topic", controller.TopicControllerGroup)
 }
 
-
 // Connect to database
 func onDBConnected(c *mongo.Database) {
 	model.InitUserModel(c)
@@ -40,4 +40,5 @@ func onDBConnected(c *mongo.Database) {
 	model.InitResultDB(c)
 	model.InitQuestionDB(c)
 	model.InitTopicDB(c)
+	model.InitSubjectDB(c)
 }

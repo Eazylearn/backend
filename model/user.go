@@ -11,25 +11,30 @@ import (
 
 type User struct {
 	// Basic information
-	UserID    int64  `json:"userId,omitempty"`
-	FirstName string `json:"firstName,omitempty"`
-	LastName  string `json:"lastName,omitempty"`
+	UserID    int64  `json:"userId" bson:"userId"`
+	FirstName string `json:"firstName,omitempty" bson:"firstName,omitempty"`
+	LastName  string `json:"lastName,omitempty" bson:"lastName,omitempty"`
 
 	// Relative information
-	Dob     *time.Time `json:"dob,omitempty"`
-	Email   string     `json:"email,omitempty"`
-	Address string     `json:"address,omitempty"`
-	Phone   string     `json:"phone,omitempty"`
+	Dob     *time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
+	Email   string     `json:"email,omitempty" bson:"email,omitempty"`
+	Address string     `json:"address,omitempty" bson:"address,omitempty"`
+	Phone   string     `json:"phone,omitempty" bson:"phone,omitempty"`
 
 	// Account and password
-	Account  string `json:"account,omitempty"`
-	Password string `json:"password,omitempty"`
+	Username string `json:"username" bson:"username"`
+	Password string `json:"password" bson:"password"`
 }
 
-// func (u User) String() string {
-// 	ujson, _ := json.Marshal(u)
-// 	return fmt.Sprintf(ujson)
-// }
+type Profile struct {
+	// Basic information
+	UserID    int64  `json:"id" bson:"id"`
+	FirstName string `json:"firstName" bson:"firstName"`
+	LastName  string `json:"lastName" bson:"lastName"`
+
+	// Relative information
+	Dob     *time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
+}
 
 var UserDB = &db.Instance{
 	CollectionName: "user",

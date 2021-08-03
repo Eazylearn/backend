@@ -5,17 +5,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Topic struct {
+type Subject struct {
 	// Basic information
-	TopicID   int64  `json:"topicId" bson:"topicId"`
-	Name      string `json:"name", bson:"name"`
 	SubjectID int64  `json:"subjectId" bson:"subjectId"`
+	Name      string `json:"name", bson:"name"`
 }
 
-var TopicDB = &db.Instance{
-	CollectionName: "topic",
+var SubjectDB = &db.Instance{
+	CollectionName: "subject",
 }
 
-func InitTopicDB(db *mongo.Database) {
+func InitSubjectDB(db *mongo.Database) {
 	TopicDB.ApplyDatabase(db)
 }
