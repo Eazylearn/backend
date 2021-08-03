@@ -13,6 +13,9 @@ import (
 // ********** Main function for managing path ********** //
 func UserControllerGroup(g *echo.Group) error {
 	g.GET("/", UserPage)
+	g.GET("/profile", GetProfileAction)
+	g.GET("/GetUserByID", GetUserByIDAction)
+	g.GET("/GetUserByFirstname", GetUserByFirstnameAction)
 	return nil
 }
 
@@ -27,9 +30,36 @@ func UserPage(c echo.Context) error {
 	return nil
 }
 
+// Return profile
+func GetProfileAction(c echo.Context) error {
+	id := c.QueryParams().Get("id")
+	if id == "" {
+		api.Respond(c, &enum.APIResponse{
+			Status: enum.APIStatus.Invalid,
+			Message: fmt.Sprintln("user_controller/GetUserByIDAction: Empty ID"),
+		})
+		return nil
+	}
+	userId, _ := strconv.ParseInt(id, 10, 64)
+	profile, err := repo.GetProfileByID(userId)
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status: enum.APIStatus.Error,
+			Message: fmt.Sprintf(err.Error()),
+		})
+		return nil
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status: enum.APIStatus.Ok,
+		Message: fmt.Sprintln("Success"),
+		Data: profile,
+	})
+	return nil
+}
+
 // Return a user by id
 func GetUserByIDAction(c echo.Context) error {
-	id := c.QueryParams().Get("ID")
+	id := c.QueryParams().Get("id")
 	if id == "" {
 		api.Respond(c, &enum.APIResponse{
 			Status: enum.APIStatus.Invalid,
@@ -56,7 +86,7 @@ func GetUserByIDAction(c echo.Context) error {
 
 // Return all users by first name
 func GetUserByFirstnameAction(c echo.Context) error {
-	firstName := c.QueryParams().Get("FirstName")
+	firstName := c.QueryParams().Get("firstName")
 	if firstName == "" {
 		api.Respond(c, &enum.APIResponse{
 			Status: enum.APIStatus.Invalid,
@@ -76,6 +106,39 @@ func GetUserByFirstnameAction(c echo.Context) error {
 		Status: enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
 		Data: user,
+	})
+	return nil
+}
+
+func UpdatePasswordAction(c echo.Context) error {
+	id := c.QueryParam("id")
+	pwd := c.QueryParam("pwd")
+	if id == "" {
+		api.Respond(c, &enum.APIResponse{
+			Status: enum.APIStatus.Invalid,
+			Message: fmt.Sprintln("user_controller/UpdatePasswordAction: Empty id"),
+		})
+		return nil
+	}
+	if pwd == "" {
+		api.Respond(c, &enum.APIResponse{
+			Status: enum.APIStatus.Invalid,
+			Message: fmt.Sprintln("user_controller/UpdatePasswordAction: Empty password"),
+		})
+		return nil
+	}
+	userId, _ := strconv.ParseInt(id, 10, 64)
+	err := repo.UpdatePassword(userId, pwd)
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status: enum.APIStatus.Error,
+			Message: fmt.Sprintf(err.Error()),
+		})
+		return nil
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status: enum.APIStatus.Ok,
+		Message: fmt.Sprintln("Success"),
 	})
 	return nil
 }
