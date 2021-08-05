@@ -14,6 +14,7 @@ import (
 func TopicControllerGroup(g *echo.Group) error {
 	g.GET("", TopicPage)
 	g.GET("/CreateTopic", CreateTopicAction)
+	g.GET("/topics", GetAllTopicAction)
 	// g.GET("/CreateTopics", CreateTopicsAction)
 	return nil
 }
@@ -49,22 +50,19 @@ func CreateTopicAction(c echo.Context) error {
 	return nil
 }
 
-// // Create many topics
-// func CreateTopicsAction(c echo.Context) error {
-// 	var body model.Topic
-// 	err := api.GetContent(c, &body)
-// 	if err != nil {
-// 		return api.Respond(c, &enum.APIResponse{
-// 			Status: enum.APIStatus.Invalid,
-// 			Message: "topic_controller.go/CreateTopicAction: Can not parse input data",
-// 		})
-// 	}
-// 	insertErr := repo.CreateTopic(body)
-// 	if insertErr != nil {
-// 		return api.Respond(c, &enum.APIResponse{
-// 			Status: enum.APIStatus.Error,
-// 			Message: fmt.Sprintf("topic_controller.go/CreateTopicAction: Error inserting topic %s", insertErr.Error()),
-// 		})
-// 	}
-// 	return nil
-// }
+func GetAllTopicAction(c echo.Context) error {
+	topics, err := repo.GetAllTopic()
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status: enum.APIStatus.Error,
+			Message: fmt.Sprintf(err.Error()),
+		})
+		return nil
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status: enum.APIStatus.Ok,
+		Message: fmt.Sprintln("Success"),
+		Data: topics,
+	})
+	return nil
+}
