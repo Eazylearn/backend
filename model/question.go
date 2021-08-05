@@ -20,6 +20,7 @@ type Question struct {
 	Index       string    `json:"Index,omitempty" bson:"Index,omitempty"`
 	Subject     string    `json:"Subject,omitempty" bson:"Subject,omitempty"`
 
+
 	// Foreign keys
 	TestID  string `json:"testId,omitempty" bson:"testId,omitempty"`
 	TopicID string `json:"topicId,omitempty" bson:"topicId,omitempty"`
