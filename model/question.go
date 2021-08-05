@@ -17,13 +17,15 @@ type Question struct {
 	Topic   string `json:"Topic,omitempty" bson:"Topic,omitempty" `
 	Index   string `json:"Index,omitempty" bson:"Index,omitempty"`
 	Subject string `json:"Subject,omitempty" bson:"Subject,omitempty"`
+	Choices string `json:"Choices,omitempty" bson:"Choices,omitempty"`
+
 	// Foreign keys
 	TestID      string `json:"TestID,omitempty" bson:"TestID,omitempty" `
 	Requirement string `json:"Requirement,omitempty" bson:"Requirement,omitempty"`
 }
 
 var QuestionDB = &db.Instance{
-	CollectionName: "test",
+	CollectionName: "question",
 }
 
 func InitQuestionDB(db *mongo.Database) {

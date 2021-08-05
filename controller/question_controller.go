@@ -40,10 +40,10 @@ func GetAllQuestionAction(c echo.Context) error {
 			Message: fmt.Sprintf("Error: %s", err),
 		})
 	}
-	return api.Respond(c, &enum.APIResponse{
+	api.Respond(c, &enum.APIResponse{
 		Status:  enum.APIStatus.Ok,
 		Data:    question,
 		Message: fmt.Sprintf("Success"),
 	})
-
+	return nil
 }

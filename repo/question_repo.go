@@ -2,7 +2,7 @@ package repo
 
 import (
 	"context"
-	"fmt"
+	//"fmt"
 	"log"
 
 	"github.com/CS426FinalProject/model"
@@ -27,8 +27,8 @@ func GetAllQuestion() ([]model.Question, error) {
 		log.Println("question_repo/GetAllQuestion: ", err.Error())
 		return list, err
 	}
-	fmt.Println(result)
-	result.All(context.TODO(), list)
-	fmt.Println(list)
+	//fmt.Println(result)
+	result.All(context.TODO(), &list)
+	//fmt.Println(list)
 	return list, nil
 }
