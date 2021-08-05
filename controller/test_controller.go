@@ -48,7 +48,6 @@ func CreateTestAction(c echo.Context) error {
 		})
 	}
 	return nil
-
 }
 func GetTestByIDAction(c echo.Context) error {
 	id := c.QueryParams().Get("id")

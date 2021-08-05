@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/CS426FinalProject/api"
@@ -19,9 +18,7 @@ import (
 func main() {
 	server := api.InitServer()
 	godotenv.Load(".env")
-
 	DB_URI := os.Getenv("DB_URI")
-	fmt.Printf(DB_URI)
 	AppDB := db.CreateUniversalDB(DB_URI, "eazylearn")
 	onDBConnected(AppDB)
 	createPath(server)
@@ -34,8 +31,6 @@ func createPath(server *api.APIServer) {
 	server.SetGroup("/user", controller.UserControllerGroup)
 	server.SetGroup("/test", controller.TestControllerGroup)
 	server.SetGroup("/topic", controller.TopicControllerGroup)
-	server.SetGroup("/question", controller.QuestionControllerGroup)
-
 }
 
 // Connect to database
@@ -45,4 +40,5 @@ func onDBConnected(c *mongo.Database) {
 	model.InitResultDB(c)
 	model.InitQuestionDB(c)
 	model.InitTopicDB(c)
+	model.InitSubjectDB(c)
 }
