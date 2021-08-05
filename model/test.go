@@ -18,7 +18,7 @@ type Test struct {
 }
 
 var TestDB = &db.Instance{
-	CollectionName: "test",
+	CollectionName: "ha",
 }
 
 func InitTestDB(db *mongo.Database) {

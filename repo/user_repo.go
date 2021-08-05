@@ -81,6 +81,7 @@ func GetUserByFirstname(firstName string) ([]model.User, error) {
 	return list, nil
 }
 
+
 // Return username
 func GetUsername(id int) (string, error) {
 	result := model.UserDB.Collection.FindOne(context.TODO(), bson.M{"userId": id})
@@ -122,3 +123,4 @@ func UpdatePassword(id int64, pwd string) error {
 	}
 	return nil
 }
+
