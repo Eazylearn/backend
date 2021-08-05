@@ -16,5 +16,5 @@ var SubjectDB = &db.Instance{
 }
 
 func InitSubjectDB(db *mongo.Database) {
-	TopicDB.ApplyDatabase(db)
+	SubjectDB.ApplyDatabase(db)
 }
