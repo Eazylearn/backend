@@ -19,7 +19,7 @@ func main() {
 	server := api.InitServer()
 	godotenv.Load(".env")
 	DB_URI := os.Getenv("DB_URI")
-	AppDB := db.CreateUniversalDB(DB_URI, "app")
+	AppDB := db.CreateUniversalDB(DB_URI, "eazylearn")
 	onDBConnected(AppDB)
 	createPath(server)
 	server.Start(":8081")
