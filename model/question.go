@@ -16,6 +16,10 @@ type Question struct {
 	Choices     [4]string `json:"choices,omitempty" bson:"choices,omitempty"`
 	Answer      string    `json:"answer"`
 	Reason      string    `json:"reason,omitempty" bson:"reason,omitempty"`
+	Type        string    `json:"Type,omitempty" bson:"Type,omitempty" `
+	Index       string    `json:"Index,omitempty" bson:"Index,omitempty"`
+	Subject     string    `json:"Subject,omitempty" bson:"Subject,omitempty"`
+
 
 	// Foreign keys
 	TestID  string `json:"testId,omitempty" bson:"testId,omitempty"`
