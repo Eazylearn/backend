@@ -19,8 +19,8 @@ type Question struct {
 	Subject     string `json:"subject,omitempty" bson:"Subject,omitempty"`
 	Choices     string `json:"choices,omitempty" bson:"Choices,omitempty"`
 	// Foreign keys
-	TestID string `json:"testID,omitempty" bson:"TestID,omitempty" `
-	Topic  string `json:"topic,omitempty" bson:"Topic,omitempty" `
+	TestId  string `json:"testId,omitempty" bson:"TestId,omitempty" `
+	TopicId string `json:"topicId,omitempty" bson:"topicId,omitempty" `
 
 	//questionId int64  `json:"questionId bson:"questionId"`
 	//	name       string `json:"name,omitempty bson:"questionId,omitempty"`

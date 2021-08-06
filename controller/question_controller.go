@@ -11,12 +11,38 @@ import (
 
 // ********** Main function for managing path ********** //
 func QuestionControllerGroup(g *echo.Group) error {
-	g.GET("/", GetAllQuestionAction)
+	g.GET("/GetAllQuestion", GetAllQuestionAction)
+	g.GET("/GetAllQuestionByTopicId", GetAllQuestionByTopicIdAction)
+
 	return nil
 }
 
 func GetAllQuestionAction(c echo.Context) error {
 	question, err := repo.GetAllQuestion()
+	if err != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("question_controller/GetAllQuestionAction: %s", err),
+		})
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Data:    question,
+		Message: fmt.Sprintf("Success"),
+	})
+	return nil
+}
+
+func GetAllQuestionByTopicIdAction(c echo.Context) error {
+	topicId := c.QueryParams().Get("topicId")
+	if topicId == "" {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: fmt.Sprintln("question_controller/GetAllQuestionByTopicIdAction: Empty ID"),
+		})
+		return nil
+	}
+	question, err := repo.GetAllQuestionByTopicId(topicId)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,

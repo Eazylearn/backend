@@ -28,3 +28,14 @@ func GetAllQuestion() ([]model.Question, error) {
 	//fmt.Println(list)
 	return list, nil
 }
+func GetAllQuestionByTopicId(topicId string) ([]model.Question, error) {
+	list := make([]model.Question, 0)
+	result, err := model.QuestionDB.Collection.Find(context.TODO(), bson.M{"Topic": topicId})
+
+	if err != nil {
+		log.Println("question_repo/GetAllQuestionByTopicId: ", err.Error())
+		return list, err
+	}
+	result.All(context.TODO(), &list)
+	return list, nil
+}
