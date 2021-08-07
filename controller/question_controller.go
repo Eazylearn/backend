@@ -13,7 +13,7 @@ import (
 func QuestionControllerGroup(g *echo.Group) error {
 	g.GET("/GetAllQuestion", GetAllQuestionAction)
 	g.GET("/GetAllQuestionByTopicId", GetAllQuestionByTopicIdAction)
-
+	g.GET("/GetQuestioByIndex", GetQuestioByIndexAction)
 	return nil
 }
 
@@ -53,6 +53,30 @@ func GetAllQuestionByTopicIdAction(c echo.Context) error {
 		Status:  enum.APIStatus.Ok,
 		Data:    question,
 		Message: fmt.Sprintf("Success"),
+	})
+	return nil
+}
+func GetQuestioByIndexAction(c echo.Context) error {
+	index := c.QueryParams().Get("index")
+	if index == "" {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: fmt.Sprintln("question_controller/GetQuestioByIndexAction: Empty index"),
+		})
+		return nil
+	}
+	question, err := repo.GetQuestioByIndex(index)
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf(err.Error()),
+		})
+		return nil
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Message: fmt.Sprintln("Success"),
+		Data:    question,
 	})
 	return nil
 }
