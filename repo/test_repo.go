@@ -11,9 +11,14 @@ import (
 func CreateTest(test model.Test) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
 	var questionArray []int32 = test.Questions[0:]
+	list := make([]model.Question, 0)
 	//questions:= []model.Question{}
 	for i := 0; i < len(questionArray); i++ {
-
+		questions, qErr := GetQuestioByIndex(string(questionArray[i]))
+		if qErr != nil {
+			log.Println("test_repo.go/CreateTest: Error finding QuestionID"+string(questionArray[i]), qErr.Error())
+		}
+		list = append(list, questions)
 	}
 
 	_, err := model.TestDB.Collection.InsertOne(context.TODO(), test)
