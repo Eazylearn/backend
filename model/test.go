@@ -14,7 +14,8 @@ type Test struct {
 	TotalQuestion int32 `json:"totalQuestion,omitempty"`
 
 	// Foreign keys
-	TopicID int64 `json:"topicId,omitempty"` // Reference to topic.go
+	//TopicID int64 `json:"topicId,omitempty"` // Reference to topic.go
+	Questions []int32 `json:"questions,omitempty"`
 }
 
 var TestDB = &db.Instance{

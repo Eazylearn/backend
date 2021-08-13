@@ -10,7 +10,14 @@ import (
 
 func CreateTest(test model.Test) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
+	var questionArray []int32 = test.Questions[0:]
+	//questions:= []model.Question{}
+	for i := 0; i < len(questionArray); i++ {
+
+	}
+
 	_, err := model.TestDB.Collection.InsertOne(context.TODO(), test)
+
 	if err != nil {
 		return err
 	}
