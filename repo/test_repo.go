@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func CreateTest(test model.Test) error {
+func CreateTest(test model.PostTest) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
 	var questionArray []int32 = test.Questions[0:]
 	list := make([]model.Question, 0)
@@ -21,7 +21,13 @@ func CreateTest(test model.Test) error {
 		list = append(list, questions)
 	}
 
-	_, err := model.TestDB.Collection.InsertOne(context.TODO(), test)
+	body := model.Test{
+		TestID:        test.TestID,
+		Name:          test.Name,
+		TotalQuestion: test.TotalQuestion,
+		Questions:     list,
+	}
+	_, err := model.TestDB.Collection.InsertOne(context.TODO(), body)
 
 	if err != nil {
 		return err
