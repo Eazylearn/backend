@@ -39,15 +39,19 @@ func GetAllQuestionByTopicId(topicId string) ([]model.Question, error) {
 	result.All(context.TODO(), &list)
 	return list, nil
 }
-func GetQuestioByIndex(index string) ([]model.Question, error) {
-	list := make([]model.Question, 0)
-	result := model.QuestionDB.Collection.FindOne(context.TODO(), bson.M{"Index": index})
+func GetQuestioByIndex(index string) (model.Question, error) {
 	var question model.Question
-	err := result.Decode(&question)
-	if err != nil {
-		log.Println("question_repo/GetQuestioByIndex: ", err.Error())
-		return list, err
+	result, qErr := model.QuestionDB.Collection.Find(context.TODO(), bson.M{"Index": index})
+
+	if qErr != nil {
+		log.Println("question_repo/GetQuestioByIndex: ", qErr.Error())
+		return question, qErr
 	}
-	list = append(list, question)
-	return list, nil
+	err := result.All(context.TODO(), &question)
+	if err != nil {
+		log.Println("question_repo.go/GetQuestioByIndex: Error encoding", err.Error())
+		return question, err
+	}
+
+	return question, nil
 }
