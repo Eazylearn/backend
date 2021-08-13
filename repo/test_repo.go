@@ -30,6 +30,7 @@ func CreateTest(test model.PostTest) error {
 	_, err := model.TestDB.Collection.InsertOne(context.TODO(), body)
 
 	if err != nil {
+		log.Println("test_repo.go/CreateTest: Error Inserting", err.Error())
 		return err
 	}
 	return nil
