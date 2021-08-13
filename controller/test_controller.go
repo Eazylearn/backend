@@ -30,7 +30,7 @@ func TestPage(c echo.Context) error {
 // Create a test
 
 func CreateTestAction(c echo.Context) error {
-	var body model.Test
+	var body model.PostTest
 	err := api.GetContent(c, &body)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{
