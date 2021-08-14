@@ -7,8 +7,8 @@ import (
 
 type Question struct {
 	// Basic information
-	QuestionId int64  `json:"QuestionId" bson:"QuestionId"`
-	Name       string `json:"Name,omitempty" bson:"Name,omitempty"`
+	//QuestionId int64  `json:"1uestionId" bson:"QuestionId"`
+	Name string `json:"name,omitempty" bson:"Name,omitempty"`
 
 	Content     string `json:"content,omitempty" bson:"Content,omitempty"`
 	Answer      string `json:"cnswer,omitempty" bson:"Answer,omitempty"`
