@@ -8,7 +8,7 @@ import (
 type Topic struct {
 	// Basic information
 	TopicID   int64  `json:"topicId" bson:"topicId"`
-	Name      string `json:"name", bson:"name"`
+	Name      string `json:"name" bson:"name"`
 	SubjectID int64  `json:"subjectId" bson:"subjectId"`
 }
 
