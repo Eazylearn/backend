@@ -13,22 +13,13 @@ import (
 
 // ********** Main function for managing path ********** //
 func SubjectControllerGroup(g *echo.Group) error {
-	g.GET("", SubjectPage)
-	g.GET("/createSubject", CreateSubjectAction)
+	g.POST("/subject/create", CreateSubjectAction)
 	g.GET("/subjects", GetAllSubjectAction)
+	g.GET("/subject", GetSubjectByIDAction)
 	return nil
 }
 
 //////////////////////////////////////////////////////////
-
-// Testing root path of user page
-func SubjectPage(c echo.Context) error {
-	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
-		Message: fmt.Sprintf("Subject Page"),
-	})
-	return nil
-}
 
 // Create a topic
 func CreateSubjectAction(c echo.Context) error {
@@ -36,14 +27,14 @@ func CreateSubjectAction(c echo.Context) error {
 	err := api.GetContent(c, &body)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: "subject_controller.go/CreateSubjectAction: Can not parse input data",
 		})
 	}
 	insertErr := repo.CreateSubject(body)
 	if insertErr != nil {
 		return api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf("subject_controller.go/CreateSubjectAction: Error inserting subject %s", insertErr.Error()),
 		})
 	}
@@ -54,23 +45,23 @@ func GetSubjectByIDAction(c echo.Context) error {
 	id := c.QueryParams().Get("id")
 	if id == "" {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: fmt.Sprintln("subject_controller/GetSubjectByIDAction: Empty ID"),
 		})
 		return nil
 	}
 	subjectId, _ := strconv.ParseInt(id, 10, 64)
-	subject, err := repo.GetSubjectByID(subjectId);
+	subject, err := repo.GetSubjectByID(subjectId)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
 	}
 	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
+		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
-		Data: subject,
+		Data:    subject,
 	})
 	return nil
 }
@@ -79,15 +70,15 @@ func GetAllSubjectAction(c echo.Context) error {
 	subjects, err := repo.GetAllSubject()
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
 		return nil
 	}
 	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
+		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
-		Data: subjects,
+		Data:    subjects,
 	})
 	return nil
 }
