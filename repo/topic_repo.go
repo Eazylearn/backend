@@ -24,6 +24,6 @@ func GetAllTopic() ([]model.Topic, error) {
 		log.Println("topic_repo/GetAllTopic: ", err.Error())
 		return list, err
 	}
-	result.All(context.TODO(),list)
+	result.All(context.TODO(),&list)
 	return list, nil
 }

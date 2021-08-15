@@ -27,15 +27,13 @@ func main() {
 
 // Create path
 func createPath(server *api.APIServer) {
-	server.SetGroup("/", controller.RootControllerGroup)
-	server.SetGroup("/user", controller.UserControllerGroup)
-	server.SetGroup("/test", controller.TestControllerGroup)
-	server.SetGroup("/topic", controller.TopicControllerGroup)
-	server.SetGroup("/question", controller.QuestionControllerGroup)
-
-
-	server.SetGroup("/result", controller.ResultControllerGroup)
-	server.SetGroup("/subject", controller.SubjectControllerGroup)
+	server.SetGroup("", controller.RootControllerGroup)
+	server.SetGroup("", controller.UserControllerGroup)
+	server.SetGroup("", controller.TestControllerGroup)
+	server.SetGroup("", controller.TopicControllerGroup)
+	server.SetGroup("", controller.QuestionControllerGroup)
+	server.SetGroup("", controller.ResultControllerGroup)
+	server.SetGroup("", controller.SubjectControllerGroup)
 }
 
 // Connect to database

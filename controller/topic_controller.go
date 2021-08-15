@@ -12,8 +12,7 @@ import (
 
 // ********** Main function for managing path ********** //
 func TopicControllerGroup(g *echo.Group) error {
-	g.GET("", TopicPage)
-	g.GET("/CreateTopic", CreateTopicAction)
+	g.POST("/topic/create", CreateTopicAction)
 	g.GET("/topics", GetAllTopicAction)
 	// g.GET("/CreateTopics", CreateTopicsAction)
 	return nil
@@ -21,29 +20,20 @@ func TopicControllerGroup(g *echo.Group) error {
 
 //////////////////////////////////////////////////////////
 
-// Testing root path of user page
-func TopicPage(c echo.Context) error {
-	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
-		Message: fmt.Sprintf("Topic Page"),
-	})
-	return nil
-}
-
 // Create a topic
 func CreateTopicAction(c echo.Context) error {
 	var body model.Topic
 	err := api.GetContent(c, &body)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: "topic_controller.go/CreateTopicAction: Can not parse input data",
 		})
 	}
 	insertErr := repo.CreateTopic(body)
 	if insertErr != nil {
 		return api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf("topic_controller.go/CreateTopicAction: Error inserting topic %s", insertErr.Error()),
 		})
 	}
@@ -54,15 +44,15 @@ func GetAllTopicAction(c echo.Context) error {
 	topics, err := repo.GetAllTopic()
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
 		return nil
 	}
 	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
+		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
-		Data: topics,
+		Data:    topics,
 	})
 	return nil
 }

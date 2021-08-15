@@ -12,30 +12,20 @@ import (
 
 // ********** Main function for managing path ********** //
 func UserControllerGroup(g *echo.Group) error {
-	g.GET("/", UserPage)
 	g.GET("/profile", GetProfileAction)
-	g.GET("/GetUserByID", GetUserByIDAction)
-	g.GET("/GetUserByFirstname", GetUserByFirstnameAction)
+	g.GET("/user", GetUserByIDAction)
+	//g.GET("/user", GetUserByFirstnameAction)
 	return nil
 }
 
 //////////////////////////////////////////////////////////
-
-// Testing root path of user page
-func UserPage(c echo.Context) error {
-	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
-		Message: fmt.Sprintf("User Page"),
-	})
-	return nil
-}
 
 // Return profile
 func GetProfileAction(c echo.Context) error {
 	id := c.QueryParams().Get("id")
 	if id == "" {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: fmt.Sprintln("user_controller/GetUserByIDAction: Empty ID"),
 		})
 		return nil
@@ -44,15 +34,15 @@ func GetProfileAction(c echo.Context) error {
 	profile, err := repo.GetProfileByID(userId)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
 		return nil
 	}
 	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
+		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
-		Data: profile,
+		Data:    profile,
 	})
 	return nil
 }
@@ -62,7 +52,7 @@ func GetUserByIDAction(c echo.Context) error {
 	id := c.QueryParams().Get("id")
 	if id == "" {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: fmt.Sprintln("user_controller/GetUserByIDAction: Empty ID"),
 		})
 		return nil
@@ -71,15 +61,15 @@ func GetUserByIDAction(c echo.Context) error {
 	user, err := repo.GetUserByID(userId)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
 		return nil
 	}
 	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
+		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
-		Data: user,
+		Data:    user,
 	})
 	return nil
 }
@@ -89,7 +79,7 @@ func GetUserByFirstnameAction(c echo.Context) error {
 	firstName := c.QueryParams().Get("firstName")
 	if firstName == "" {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: fmt.Sprintln("user_controller/GetUserByFirstnameAction: Empty first name"),
 		})
 		return nil
@@ -97,15 +87,15 @@ func GetUserByFirstnameAction(c echo.Context) error {
 	user, err := repo.GetUserByFirstname(firstName)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
 		return nil
 	}
 	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
+		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
-		Data: user,
+		Data:    user,
 	})
 	return nil
 }
@@ -115,14 +105,14 @@ func UpdatePasswordAction(c echo.Context) error {
 	pwd := c.QueryParam("pwd")
 	if id == "" {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: fmt.Sprintln("user_controller/UpdatePasswordAction: Empty id"),
 		})
 		return nil
 	}
 	if pwd == "" {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Invalid,
+			Status:  enum.APIStatus.Invalid,
 			Message: fmt.Sprintln("user_controller/UpdatePasswordAction: Empty password"),
 		})
 		return nil
@@ -131,13 +121,13 @@ func UpdatePasswordAction(c echo.Context) error {
 	err := repo.UpdatePassword(userId, pwd)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
-			Status: enum.APIStatus.Error,
+			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
 		return nil
 	}
 	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
+		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
 	})
 	return nil
