@@ -16,6 +16,26 @@ func CreateQuestion(question model.Question) error {
 	}
 	return nil
 }
+func GetAllQuestionByQuery(query *model.GetQuestionRequest) ([]model.Question, error) {
+	filter := bson.M{}
+	if query.TopicId != "" {
+		filter["TopicId"] = query.TopicId
+	}
+	if query.Index != "" {
+		filter["Index"] = query.Index
+	}
+	list := make([]model.Question, 0)
+	result, err := model.QuestionDB.Collection.Find(context.TODO(), filter)
+	if err != nil {
+		log.Println("question_repo/GetAllQuestion: ", err.Error())
+		return list, err
+	}
+	//fmt.Println(result)
+	result.All(context.TODO(), &list)
+	//fmt.Println(list)
+	return list, nil
+
+}
 func GetAllQuestion() ([]model.Question, error) {
 	list := make([]model.Question, 0)
 	result, err := model.QuestionDB.Collection.Find(context.TODO(), bson.M{})
