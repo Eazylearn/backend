@@ -7,8 +7,8 @@ import (
 
 type Question struct {
 	// Basic information
-	QuestionId int64  `json:"QuestionId" bson:"QuestionId"`
-	Name       string `json:"Name,omitempty" bson:"Name,omitempty"`
+	//QuestionId int64  `json:"1uestionId" bson:"QuestionId"`
+	Name string `json:"name,omitempty" bson:"Name,omitempty"`
 
 	Content     string `json:"content,omitempty" bson:"Content,omitempty"`
 	Answer      string `json:"cnswer,omitempty" bson:"Answer,omitempty"`
@@ -20,7 +20,7 @@ type Question struct {
 	Choices     string `json:"choices,omitempty" bson:"Choices,omitempty"`
 	// Foreign keys
 	TestId  string `json:"testId,omitempty" bson:"TestId,omitempty" `
-	TopicId string `json:"topicId,omitempty" bson:"topicId,omitempty" `
+	TopicId string `json:"topicId,omitempty" bson:"TopicId,omitempty" `
 
 	//questionId int64  `json:"questionId bson:"questionId"`
 	//	name       string `json:"name,omitempty bson:"questionId,omitempty"`
@@ -38,6 +38,10 @@ type Question struct {
 	// Foreign keys
 	testId  string `json:"testId,omitempty" bson:"testId,omitempty"`
 	topicId string `json:"topicId,omitempty" bson:"topicId,omitempty"`*/
+}
+
+type GetQuestionRequest struct {
+	Question
 }
 
 var QuestionDB = &db.Instance{
