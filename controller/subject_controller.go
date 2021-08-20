@@ -13,9 +13,9 @@ import (
 
 // ********** Main function for managing path ********** //
 func SubjectControllerGroup(g *echo.Group) error {
-	g.POST("/subject/create", CreateSubjectAction)
-	g.GET("/subjects", GetAllSubjectAction)
-	g.GET("/subject", GetSubjectByIDAction)
+	g.POST("/create", CreateSubjectAction)
+	g.GET("s", GetAllSubjectAction)
+	g.GET("", GetSubjectByIDAction)
 	return nil
 }
 

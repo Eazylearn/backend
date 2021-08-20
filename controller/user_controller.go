@@ -6,6 +6,7 @@ import (
 
 	"github.com/CS426FinalProject/api"
 	"github.com/CS426FinalProject/enum"
+	"github.com/CS426FinalProject/model"
 	"github.com/CS426FinalProject/repo"
 	"github.com/labstack/echo/v4"
 )
@@ -13,12 +14,32 @@ import (
 // ********** Main function for managing path ********** //
 func UserControllerGroup(g *echo.Group) error {
 	g.GET("/profile", GetProfileAction)
-	g.GET("/user", GetUserByIDAction)
-	//g.GET("/user", GetUserByFirstnameAction)
+	g.GET("/find", GetUserByIDAction)
+	g.POST("/create", CreateUserAction)
 	return nil
 }
 
 //////////////////////////////////////////////////////////
+
+// Create user
+func CreateUserAction(c echo.Context) error {
+	var body []model.User
+	err := api.GetContent(c, &body)
+	if err != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: "user_controller.go/CreateUserAction: Can not parse input data",
+		})
+	}
+	insertErr := repo.CreateUser(body)
+	if insertErr != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("user_controller.go/CreateUserAction: Error inserting topic %s", insertErr.Error()),
+		})
+	}
+	return nil
+}
 
 // Return profile
 func GetProfileAction(c echo.Context) error {
@@ -58,37 +79,12 @@ func GetUserByIDAction(c echo.Context) error {
 		return nil
 	}
 	userId, _ := strconv.ParseInt(id, 10, 64)
+	fmt.Println(userId)
 	user, err := repo.GetUserByID(userId)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
-			Message: fmt.Sprintf(err.Error()),
-		})
-		return nil
-	}
-	api.Respond(c, &enum.APIResponse{
-		Status:  enum.APIStatus.Ok,
-		Message: fmt.Sprintln("Success"),
-		Data:    user,
-	})
-	return nil
-}
-
-// Return all users by first name
-func GetUserByFirstnameAction(c echo.Context) error {
-	firstName := c.QueryParams().Get("firstName")
-	if firstName == "" {
-		api.Respond(c, &enum.APIResponse{
-			Status:  enum.APIStatus.Invalid,
-			Message: fmt.Sprintln("user_controller/GetUserByFirstnameAction: Empty first name"),
-		})
-		return nil
-	}
-	user, err := repo.GetUserByFirstname(firstName)
-	if err != nil {
-		api.Respond(c, &enum.APIResponse{
-			Status:  enum.APIStatus.Error,
-			Message: fmt.Sprintf(err.Error()),
+			Message: fmt.Sprintf("user_controller/GetUserByIDAction: Error " + err.Error()),
 		})
 		return nil
 	}

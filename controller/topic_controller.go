@@ -12,8 +12,8 @@ import (
 
 // ********** Main function for managing path ********** //
 func TopicControllerGroup(g *echo.Group) error {
-	g.POST("/topic/create", CreateTopicAction)
-	g.GET("/topics", GetAllTopicAction)
+	g.POST("/create", CreateTopicAction)
+	g.GET("s", GetAllTopicAction)
 	// g.GET("/CreateTopics", CreateTopicsAction)
 	return nil
 }
@@ -22,7 +22,7 @@ func TopicControllerGroup(g *echo.Group) error {
 
 // Create a topic
 func CreateTopicAction(c echo.Context) error {
-	var body model.Topic
+	var body []model.Topic
 	err := api.GetContent(c, &body)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{
