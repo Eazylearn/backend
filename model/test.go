@@ -20,8 +20,8 @@ type PostTest struct {
 }
 type Test struct {
 	// Basic information of test
-	TestID int64  `json:"testId,omitempty" bson:"testId,omitempty"`
-	Name   string `json:"name,omitempty" bson:"Nnam,omitempty"`
+	TestID int64  `json:"testId,omitempty" bson:"TestId,omitempty"`
+	Name   string `json:"name,omitempty" bson:"Name,omitempty"`
 
 	// Relative information of test
 	TotalQuestion int32  `json:"totalQuestion,omitempty"  bson:"TotalQuestion,omitempty"`
