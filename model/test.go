@@ -32,10 +32,14 @@ type Test struct {
 	Questions []Question `json:"questions,omitempty"  bson:"Questions,omitempty"`
 }
 
-var TestDB = &db.Instance{
-	CollectionName: "test",
+var Test_ENGDB = &db.Instance{
+	CollectionName: "test_ENG",
+}
+var Test_MTHDB = &db.Instance{
+	CollectionName: "test_MTH",
 }
 
 func InitTestDB(db *mongo.Database) {
-	TestDB.ApplyDatabase(db)
+	Test_ENGDB.ApplyDatabase(db)
+	Test_MTHDB.ApplyDatabase(db)
 }
