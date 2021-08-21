@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"encoding/json"
+
 	"fmt"
 
 	"github.com/CS426FinalProject/api"
@@ -12,7 +14,9 @@ import (
 
 // ********** Main function for managing path ********** //
 func TestControllerGroup(g *echo.Group) error {
-	g.GET("/", TestPage)
+	g.GET("/CreateTest", CreateTestAction)
+	g.GET("/", GetAllTestByQueryAtcion)
+
 	return nil
 }
 
@@ -45,5 +49,29 @@ func CreateTestAction(c echo.Context) error {
 			Message: fmt.Sprintf("Error inserting test: %s", insertErr.Error()),
 		})
 	}
+	return nil
+}
+func GetAllTestByQueryAtcion(c echo.Context) error {
+	var input model.Test
+	param := c.QueryParams().Get("q")
+	if param == "" {
+		param = "{}"
+	}
+	paramErr := json.Unmarshal([]byte(param), &input)
+	if paramErr != nil {
+		return nil
+	}
+	test, err := repo.GetAllTestByQuery(&input)
+	if err != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("test_controller/GetAllTestByQueryAtcion: %s", err),
+		})
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Data:    test,
+		Message: fmt.Sprintf("Success"),
+	})
 	return nil
 }

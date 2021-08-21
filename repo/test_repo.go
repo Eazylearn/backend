@@ -8,6 +8,7 @@ import (
 
 	"github.com/CS426FinalProject/model"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func InsertToCollection(test model.Test, collection string) error {
@@ -23,6 +24,21 @@ func InsertToCollection(test model.Test, collection string) error {
 	}
 	fmt.Printf("test_repo.go/CreateTest: Error cannot find subject or collection name")
 	return nil
+	//_, err := model.Test_ENGDB.Collection.InsertOne(context.TODO(), test)
+}
+func FindInCollection(filter bson.M, collection string) (*mongo.Cursor, error) {
+	if collection == "English" {
+		return model.Test_ENGDB.Collection.Find(context.TODO(), filter)
+
+		//return err
+	}
+	if collection == "Math" {
+		return model.Test_MTHDB.Collection.Find(context.TODO(), filter)
+
+		//return err
+	}
+	fmt.Printf("test_repo.go/FindInCollection: Error cannot find subject or collection name")
+	return nil, nil
 	//_, err := model.Test_ENGDB.Collection.InsertOne(context.TODO(), test)
 }
 func CreateTest(test model.PostTest) error {
@@ -55,17 +71,25 @@ func CreateTest(test model.PostTest) error {
 	return nil
 }
 
-func GetTestByID(id int64) (model.Test, error) {
-	var test model.Test
-	result, qErr := model.Test_ENGDB.Collection.Find(context.TODO(), bson.M{"testID": id})
-	if qErr != nil {
-		log.Println("test_repo.go/GetTestByID: Error finding", qErr.Error())
-		return test, qErr
+func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
+	filter := bson.M{}
+	if query.Subject != "" {
+		filter["Subject"] = query.Subject
+		if query.Name != "" {
+			filter["Name"] = query.Name
+		}
+		if query.TestID != 0 {
+			filter["TestID"] = query.TestID
+		}
+
 	}
-	err := result.All(context.TODO(), &test)
+
+	list := make([]model.Test, 0)
+	result, err := FindInCollection(filter, query.Subject)
 	if err != nil {
-		log.Println("test_repo.go/GetTestByID: Error encoding", err.Error())
-		return test, err
+		log.Println("test_repo/GetAllTestByQuery: error FindInCollection", err.Error())
+		return list, err
 	}
-	return test, nil
+	result.All(context.TODO(), &list)
+	return list, nil
 }
