@@ -8,25 +8,25 @@ import (
 type PostTest struct {
 	// Basic information of test
 	TestID int64  `json:"testId,omitempty" bson:"testId,omitempty"`
-	Name   string `json:"name,omitempty" bson:"Nnam,omitempty"`
+	Name   string `json:"name,omitempty" bson:"Name,omitempty"`
 
 	// Relative information of test
 	TotalQuestion int32  `json:"totalQuestion,omitempty"`
-	Subject       string `json:"Subject,omitempty"  bson:"Subject,omitempty"`
-	Type          string `json:"Type,omitempty"  bson:"Type,omitempty"` //combination v 1 subject
+	Subject       string `json:"subject,omitempty"  bson:"Subject,omitempty"`
+	Type          string `json:"type,omitempty"  bson:"Type,omitempty"` //combination v 1 subject
 	// Foreign keys
 	//TopicID int64 `json:"topicId,omitempty"` // Reference to topic.go
 	Questions []int32 `json:"questions,omitempty"`
 }
 type Test struct {
 	// Basic information of test
-	TestID int64  `json:"testId,omitempty" bson:"testId,omitempty"`
-	Name   string `json:"name,omitempty" bson:"Nnam,omitempty"`
+	TestID int64  `json:"testId,omitempty" bson:"TestId,omitempty"`
+	Name   string `json:"name,omitempty" bson:"Name,omitempty"`
 
 	// Relative information of test
 	TotalQuestion int32  `json:"totalQuestion,omitempty"  bson:"TotalQuestion,omitempty"`
-	Subject       string `json:"Subject,omitempty"  bson:"Subject,omitempty"`
-	Type          string `json:"Type,omitempty"  bson:"Type,omitempty"` //combination v 1 subject
+	Subject       string `json:"subject,omitempty"  bson:"Subject,omitempty"`
+	Type          string `json:"type,omitempty"  bson:"Type,omitempty"` //combination v 1 subject
 	// Foreign keys
 	//TopicID int64 `json:"topicId,omitempty"` // Reference to topic.go
 	Questions []Question `json:"questions,omitempty"  bson:"Questions,omitempty"`
