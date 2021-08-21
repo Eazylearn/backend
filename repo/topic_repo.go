@@ -8,11 +8,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func CreateTopic(topic model.Topic) error {
+func CreateTopic(topic []model.Topic) error {
 	// return &Topic{TopicId: 1, Name: "New topic"}
-	_, err := model.TopicDB.Collection.InsertOne(context.TODO(), topic)
-	if err != nil {
-		return err
+	for i := 0; i < len(topic); i++ {
+		_, err := model.TopicDB.Collection.InsertOne(context.TODO(), topic[i])
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -24,6 +26,6 @@ func GetAllTopic() ([]model.Topic, error) {
 		log.Println("topic_repo/GetAllTopic: ", err.Error())
 		return list, err
 	}
-	result.All(context.TODO(),list)
+	result.All(context.TODO(), &list)
 	return list, nil
 }
