@@ -14,13 +14,13 @@ import (
 // ********** Main function for managing path ********** //
 func QuestionControllerGroup(g *echo.Group) error {
 	g.GET("/", GetAllQuestionAction)
-
+	g.POST("/create", CreateQuestionAction)
 	//g.GET("/GetAllQuestionByTopicId", GetAllQuestionByTopicIdAction)
 	//g.GET("/GetQuestioByIndex", GetQuestioByIndexAction)
 	return nil
 }
 func CreateQuestionAction(c echo.Context) error {
-	var body model.Question
+	var body []model.Question
 	err := api.GetContent(c, &body)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{
