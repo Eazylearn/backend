@@ -19,6 +19,24 @@ func QuestionControllerGroup(g *echo.Group) error {
 	//g.GET("/GetQuestioByIndex", GetQuestioByIndexAction)
 	return nil
 }
+func CreateQuestionAction(c echo.Context) error {
+	var body model.Question
+	err := api.GetContent(c, &body)
+	if err != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: "question_controller/CreateQuestionAction Can not parse input data",
+		})
+	}
+	insertErr := repo.CreateQuestion(body)
+	if insertErr != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("question_controller/CreateQuestionAction Error inserting question: %s", insertErr.Error()),
+		})
+	}
+	return nil
+}
 
 func GetAllQuestionAction(c echo.Context) error {
 	//question, err := repo.GetAllQuestion()
