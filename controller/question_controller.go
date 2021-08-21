@@ -13,7 +13,8 @@ import (
 
 // ********** Main function for managing path ********** //
 func QuestionControllerGroup(g *echo.Group) error {
-	g.GET("s", GetAllQuestionAction)
+	g.GET("/", GetAllQuestionAction)
+
 	//g.GET("/GetAllQuestionByTopicId", GetAllQuestionByTopicIdAction)
 	//g.GET("/GetQuestioByIndex", GetQuestioByIndexAction)
 	return nil

@@ -21,7 +21,7 @@ func GetAllQuestionByQuery(query *model.GetQuestionRequest) ([]model.Question, e
 	if query.TopicId != "" {
 		filter["TopicId"] = query.TopicId
 	}
-	if query.Index != "" {
+	if query.Index != 0 {
 		filter["Index"] = query.Index
 	}
 	list := make([]model.Question, 0)
