@@ -25,6 +25,7 @@ func CreateTest(test model.PostTest) error {
 		TestID:        test.TestID,
 		Name:          test.Name,
 		TotalQuestion: test.TotalQuestion,
+		Subject:       test.Subject,
 		Questions:     list,
 	}
 	_, err := model.TestDB.Collection.InsertOne(context.TODO(), body)
