@@ -1,7 +1,9 @@
 package model
 
 import (
+	"encoding/json"
 	"time"
+
 	// "encoding/json"
 	// "fmt"
 
@@ -16,10 +18,10 @@ type User struct {
 	LastName  string `json:"lastName,omitempty" bson:"lastName,omitempty"`
 
 	// Relative information
-	Dob     *time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
-	Email   string     `json:"email,omitempty" bson:"email,omitempty"`
-	Address string     `json:"address,omitempty" bson:"address,omitempty"`
-	Phone   string     `json:"phone,omitempty" bson:"phone,omitempty"`
+	Dob     time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
+	Email   string    `json:"email,omitempty" bson:"email,omitempty"`
+	Address string    `json:"address,omitempty" bson:"address,omitempty"`
+	Phone   string    `json:"phone,omitempty" bson:"phone,omitempty"`
 
 	// Account and password
 	Username string `json:"username" bson:"username"`
@@ -33,7 +35,12 @@ type Profile struct {
 	LastName  string `json:"lastName" bson:"lastName"`
 
 	// Relative information
-	Dob     *time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
+	Dob time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
+}
+
+func (u User) String() string {
+	ujson, _ := json.Marshal(u)
+	return string(ujson)
 }
 
 var UserDB = &db.Instance{

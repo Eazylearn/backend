@@ -9,7 +9,7 @@ import (
 )
 
 // Create a user
-func CreateUser(user model.User) (model.User, error) {
+func CreateUser(user []model.User) error {
 	// return &User{
 	//		userId: 1,
 	//		firstName: "first name",
@@ -17,51 +17,40 @@ func CreateUser(user model.User) (model.User, error) {
 	//		dob: yyyy-mm-dd,
 	//		email: "abc@gmail.com"
 	//		phone: "0123456789",
-	//		account: "abc",
+	//		username: "abc",
 	//		password: "123"
 	//	}
-	var newUser model.User
-	_, err := model.UserDB.Collection.InsertOne(context.TODO(), user)
-	// Query new user
-	// ...
-	if err != nil {
-		return newUser, err
+	for i := 0; i < len(user); i++ {
+		_, err := model.UserDB.Collection.InsertOne(context.TODO(), user[i])
+		if err != nil {
+			return err
+		}
 	}
-	return newUser, nil
+	return nil
 }
 
 // Return profile by id
 func GetProfileByID(id int64) (model.Profile, error) {
-	var user model.User
 	var profile model.Profile
-	result, qErr := model.UserDB.Collection.Find(context.TODO(), bson.M{"userId": id})
-	if qErr != nil {
-		log.Println("user_repo.go/FindUserByID: Error finding", qErr.Error())
-		return profile, qErr
+	var user model.User
+	err := model.UserDB.Collection.FindOne(context.TODO(), bson.D{{"userId", id}}).Decode(&user)
+	if err != nil {
+		log.Println("user_repo.go/FindUserByID: Error finding", err.Error())
+		return profile, err
 	}
 	profile.UserID = user.UserID
 	profile.FirstName = user.FirstName
 	profile.LastName = user.LastName
 	profile.Dob = user.Dob
-	err := result.All(context.TODO(), &profile)
-	if err != nil {
-		log.Println("user_repo.go/FindUserByID: Error encoding", err.Error())
-		return profile, err
-	}
 	return profile, nil
 }
 
 // Return user by id
 func GetUserByID(id int64) (model.User, error) {
 	var user model.User
-	result, qErr := model.UserDB.Collection.Find(context.TODO(), bson.M{"userId": id})
-	if qErr != nil {
-		log.Println("user_repo.go/FindUserByID: Error finding", qErr.Error())
-		return user, qErr
-	}
-	err := result.All(context.TODO(), &user)
+	err := model.UserDB.Collection.FindOne(context.TODO(), bson.D{{"userId", id}}).Decode(&user)
 	if err != nil {
-		log.Println("user_repo.go/FindUserByID: Error encoding", err.Error())
+		log.Println("user_repo.go/FindUserByID: Error finding", err.Error())
 		return user, err
 	}
 	return user, nil
