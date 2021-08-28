@@ -13,7 +13,7 @@ import (
 
 // ********** Main function for managing path ********** //
 func QuestionControllerGroup(g *echo.Group) error {
-	g.GET("/", GetAllQuestionAction)
+	g.GET("", GetAllQuestionAction)
 	g.POST("/create", CreateQuestionAction)
 	//g.GET("/GetAllQuestionByTopicId", GetAllQuestionByTopicIdAction)
 	//g.GET("/GetQuestioByIndex", GetQuestioByIndexAction)
@@ -42,12 +42,20 @@ func GetAllQuestionAction(c echo.Context) error {
 	//question, err := repo.GetAllQuestion()
 	var input model.GetQuestionRequest
 	param := c.QueryParams().Get("q")
+	api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Data:    "",
+		Message: fmt.Sprintf("param %s", param),
+	})
 	if param == "" {
 		param = "{}"
 	}
 	paramErr := json.Unmarshal([]byte(param), &input)
 	if paramErr != nil {
-		return nil
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("question_controller/GetAllQuestionAction: paramErr %s", paramErr),
+		})
 	}
 	question, err := repo.GetAllQuestionByQuery(&input)
 	if err != nil {
@@ -56,6 +64,7 @@ func GetAllQuestionAction(c echo.Context) error {
 			Message: fmt.Sprintf("question_controller/GetAllQuestionAction: %s", err),
 		})
 	}
+
 	api.Respond(c, &enum.APIResponse{
 		Status:  enum.APIStatus.Ok,
 		Data:    question,
