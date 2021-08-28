@@ -32,8 +32,13 @@ func GetAllQuestionByQuery(query *model.GetQuestionRequest) ([]model.Question, e
 		log.Println("question_repo/GetAllQuestion: ", err.Error())
 		return list, err
 	}
+
 	//fmt.Println(result)
 	result.All(context.TODO(), &list)
+	/*if len(list) == 0 {
+		log.Println("question_repo/GetAllQuestion: wrong parameter", err.Error())
+		return list, err
+	}*/
 	//fmt.Println(list)
 	return list, nil
 
@@ -45,9 +50,11 @@ func GetAllQuestion() ([]model.Question, error) {
 		log.Println("question_repo/GetAllQuestion: ", err.Error())
 		return list, err
 	}
+
 	//fmt.Println(result)
 	result.All(context.TODO(), &list)
 	//fmt.Println(list)
+
 	return list, nil
 }
 func GetAllQuestionByTopicId(topicId string) ([]model.Question, error) {
