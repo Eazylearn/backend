@@ -20,7 +20,10 @@ func CreateUser(user []model.User) error {
 	//		username: "abc",
 	//		password: "123"
 	//	}
+	lastestID, _ := model.UserDB.Collection.CountDocuments(context.TODO(), bson.D{})
 	for i := 0; i < len(user); i++ {
+		lastestID = lastestID + 1
+		user[i].UserID = lastestID
 		_, err := model.UserDB.Collection.InsertOne(context.TODO(), user[i])
 		if err != nil {
 			return err
