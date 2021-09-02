@@ -14,14 +14,14 @@ import (
 type User struct {
 	// Basic information
 	UserID    int64  `json:"userId" bson:"userId"`
-	FirstName string `json:"firstName,omitempty" bson:"firstName,omitempty"`
-	LastName  string `json:"lastName,omitempty" bson:"lastName,omitempty"`
+	FirstName string `json:"firstName" bson:"firstName"`
+	LastName  string `json:"lastName" bson:"lastName"`
 
 	// Relative information
-	Dob     time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
-	Email   string    `json:"email,omitempty" bson:"email,omitempty"`
-	Address string    `json:"address,omitempty" bson:"address,omitempty"`
-	Phone   string    `json:"phone,omitempty" bson:"phone,omitempty"`
+	Dob     time.Time `json:"dob" bson:"dob"`
+	Email   string    `json:"email" bson:"email"`
+	Address string    `json:"address" bson:"address"`
+	Phone   string    `json:"phone" bson:"phone"`
 
 	// Account and password
 	Username string `json:"username" bson:"username"`
