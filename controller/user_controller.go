@@ -32,15 +32,19 @@ func CreateUserAction(c echo.Context) error {
 			Message: "user_controller.go/CreateUserAction: Can not parse input data",
 		})
 	}
+	var users []model.User
 	users, insertErr := repo.CreateUser(body)
 	if insertErr != nil {
 		return api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf("user_controller.go/CreateUserAction: Error inserting topic %s", insertErr.Error()),
-			Data:    users,
 		})
 	}
-	return nil
+	return api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Message: "Success",
+		Data:    users,
+	})
 }
 
 // Return profile
@@ -81,7 +85,6 @@ func GetUserByIDAction(c echo.Context) error {
 		return nil
 	}
 	userId, _ := strconv.ParseInt(id, 10, 64)
-	fmt.Println(userId)
 	user, err := repo.GetUserByID(userId)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{

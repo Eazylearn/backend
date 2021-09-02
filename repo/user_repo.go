@@ -10,16 +10,6 @@ import (
 
 // Create a user
 func CreateUser(users []model.User) ([]model.User, error) {
-	// return &User{
-	//		userId: 1,
-	//		firstName: "first name",
-	//		lastName: "last name",
-	//		dob: yyyy-mm-dd,
-	//		email: "abc@gmail.com"
-	//		phone: "0123456789",
-	//		username: "abc",
-	//		password: "123"
-	//	}
 	lastestID, _ := model.UserDB.Collection.CountDocuments(context.TODO(), bson.D{})
 	list := make([]model.User, 0)
 	for i := 0; i < len(users); i++ {
@@ -29,6 +19,7 @@ func CreateUser(users []model.User) ([]model.User, error) {
 		if err != nil {
 			return list, err
 		}
+
 		var user model.User
 		user, findErr := GetUserByID(lastestID)
 		if findErr != nil {
