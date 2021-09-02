@@ -16,6 +16,7 @@ func UserControllerGroup(g *echo.Group) error {
 	g.GET("/profile", GetProfileAction)
 	g.GET("/find", GetUserByIDAction)
 	g.POST("/create", CreateUserAction)
+	g.PUT("/edit", EditUserAction)
 	return nil
 }
 
@@ -31,11 +32,12 @@ func CreateUserAction(c echo.Context) error {
 			Message: "user_controller.go/CreateUserAction: Can not parse input data",
 		})
 	}
-	insertErr := repo.CreateUser(body)
+	users, insertErr := repo.CreateUser(body)
 	if insertErr != nil {
 		return api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf("user_controller.go/CreateUserAction: Error inserting topic %s", insertErr.Error()),
+			Data:    users,
 		})
 	}
 	return nil
@@ -126,5 +128,24 @@ func UpdatePasswordAction(c echo.Context) error {
 		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
 	})
+	return nil
+}
+
+func EditUserAction(c echo.Context) error {
+	var body []model.User
+	err := api.GetContent(c, &body)
+	if err != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: "user_controller.go/EditUserAction: Can not parse input data",
+		})
+	}
+	updateErr := repo.UpdateUser(body)
+	if updateErr != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("user_controller.go/EditUserAction: Error inserting topic %s", updateErr.Error()),
+		})
+	}
 	return nil
 }

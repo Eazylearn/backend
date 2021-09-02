@@ -9,7 +9,7 @@ import (
 )
 
 // Create a user
-func CreateUser(user []model.User) error {
+func CreateUser(users []model.User) ([]model.User, error) {
 	// return &User{
 	//		userId: 1,
 	//		firstName: "first name",
@@ -21,15 +21,22 @@ func CreateUser(user []model.User) error {
 	//		password: "123"
 	//	}
 	lastestID, _ := model.UserDB.Collection.CountDocuments(context.TODO(), bson.D{})
-	for i := 0; i < len(user); i++ {
+	list := make([]model.User, 0)
+	for i := 0; i < len(users); i++ {
 		lastestID = lastestID + 1
-		user[i].UserID = lastestID
-		_, err := model.UserDB.Collection.InsertOne(context.TODO(), user[i])
+		users[i].UserID = lastestID
+		_, err := model.UserDB.Collection.InsertOne(context.TODO(), users[i])
 		if err != nil {
-			return err
+			return list, err
 		}
+		var user model.User
+		user, findErr := GetUserByID(lastestID)
+		if findErr != nil {
+			return list, findErr
+		}
+		list = append(list, user)
 	}
-	return nil
+	return list, nil
 }
 
 // Return profile by id
@@ -111,6 +118,22 @@ func UpdatePassword(id int64, pwd string) error {
 	uErr := model.UserDB.Collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&updateDoc)
 	if uErr != nil {
 		log.Println("user_repo.go/UpdatePassword: Update fail", uErr.Error())
+		return uErr
+	}
+	return nil
+}
+
+func UpdateUser(users []model.User) error {
+	for i := 0; i < len(users); i++ {
+		filter := bson.M{"userId": users[i].UserID}
+		update := bson.M{"$set": users[i]}
+		var updateUser model.User
+		err := model.UserDB.Collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&updateUser)
+		if err != nil {
+			log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
+			return err
+		}
+		log.Println(updateUser)
 	}
 	return nil
 }
