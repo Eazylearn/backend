@@ -60,6 +60,7 @@ func CreateTest(test model.PostTest) error {
 		TotalQuestion: test.TotalQuestion,
 		Subject:       test.Subject,
 		Questions:     list,
+		TopicID:       test.TopicID,
 		Type:          test.Type,
 	}
 	err := InsertToCollection(body, body.Subject) //model.TestDB.Collection.InsertOne(context.TODO(), body)
@@ -75,13 +76,16 @@ func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	filter := bson.M{}
 	if query.Subject != "" {
 		filter["Subject"] = query.Subject
-		if query.Name != "" {
-			filter["Name"] = query.Name
-		}
-		if query.TestID != 0 {
-			filter["TestID"] = query.TestID
-		}
 
+	}
+	if query.Name != "" {
+		filter["Name"] = query.Name
+	}
+	if query.TestID != 0 {
+		filter["TestID"] = query.TestID
+	}
+	if len(query.TopicID)-1 != 0 {
+		filter["TopicID"] = query.TopicID
 	}
 
 	list := make([]model.Test, 0)
