@@ -26,6 +26,10 @@ type User struct {
 	// Account and password
 	Username string `json:"username" bson:"username"`
 	Password string `json:"password" bson:"password"`
+
+	// Relate to test
+	TotalTest int64   `json:"totalTest" bson:"totalTest"`
+	AvgScore  float64 `json:"avgScore" bson:"avgScore"`
 }
 
 type Profile struct {
