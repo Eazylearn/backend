@@ -24,6 +24,9 @@ func GetAllQuestionByQuery(query *model.GetQuestionRequest) ([]model.Question, e
 	if query.Index != 0 {
 		filter["Index"] = query.Index
 	}
+	if query.Level != 0 {
+		filter["Level"] = query.Level
+	}
 	list := make([]model.Question, 0)
 	result, err := model.QuestionDB.Collection.Find(context.TODO(), filter)
 	if err != nil {

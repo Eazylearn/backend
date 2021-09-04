@@ -21,6 +21,7 @@ type Question struct {
 	// Foreign keys
 	TestId  string `json:"testId,omitempty" bson:"TestId,omitempty" `
 	TopicId string `json:"topicId,omitempty" bson:"TopicId,omitempty" `
+	Level   int64  `json:"level,omitempty" bson:"Level,omitempty" `
 
 	//questionId int64  `json:"questionId bson:"questionId"`
 	//	name       string `json:"name,omitempty bson:"questionId,omitempty"`
