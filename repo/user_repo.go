@@ -116,15 +116,21 @@ func UpdatePassword(id int64, pwd string) error {
 
 func UpdateUser(users []model.User) error {
 	for i := 0; i < len(users); i++ {
-		filter := bson.M{"userId": users[i].UserID}
-		update := bson.M{"$set": users[i]}
-		var updateUser model.User
-		err := model.UserDB.Collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&updateUser)
+		filter := bson.D{{"userId", users[i].UserID}}
+		update := bson.D{{"$set", bson.D{{"firstName", "test firstname"},}},}
+		result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, update)
 		if err != nil {
 			log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
 			return err
 		}
-		log.Println(updateUser)
+	
+		if result.MatchedCount != 0 {
+			log.Println("user_repo.go/EditUser: Matched and replaced an existing document")
+			return nil
+		}
+		if result.UpsertedCount != 0 {
+			log.Printf("inserted a new document with ID %v\n", result.UpsertedID)
+		}
 	}
 	return nil
 }
