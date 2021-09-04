@@ -14,9 +14,10 @@ type PostTest struct {
 	TotalQuestion int32  `json:"totalQuestion,omitempty"`
 	Subject       string `json:"subject,omitempty"  bson:"Subject,omitempty"`
 	Type          string `json:"type,omitempty"  bson:"Type,omitempty"` //combination v 1 subject
+	Level         int64  `json:"level,omitempty"  bson:"Level,omitempty"`
 	// Foreign keys
-	//TopicID int64 `json:"topicId,omitempty"` // Reference to topic.go
-	Questions []int32 `json:"questions,omitempty"`
+	TopicID   []string `json:"topicId,omitempty"   bson:"TopicID"` // Reference to topic.go
+	Questions []int32  `json:"questions,omitempty"`
 }
 type Test struct {
 	// Basic information of test
@@ -27,8 +28,9 @@ type Test struct {
 	TotalQuestion int32  `json:"totalQuestion,omitempty"  bson:"TotalQuestion,omitempty"`
 	Subject       string `json:"subject,omitempty"  bson:"Subject,omitempty"`
 	Type          string `json:"type,omitempty"  bson:"Type,omitempty"` //combination v 1 subject
+	Level         int64  `json:"level,omitempty"  bson:"Level,omitempty"`
 	// Foreign keys
-	//TopicID int64 `json:"topicId,omitempty"` // Reference to topic.go
+	TopicID   []string   `json:"topicId,omitempty"   bson:"TopicID"` // Reference to topic.go
 	Questions []Question `json:"questions,omitempty"  bson:"Questions,omitempty"`
 }
 

@@ -41,7 +41,7 @@ func FindInCollection(filter bson.M, collection string) (*mongo.Cursor, error) {
 	return nil, nil
 	//_, err := model.Test_ENGDB.Collection.InsertOne(context.TODO(), test)
 }
-func CreateTest(test model.PostTest) error {
+func CreateTestByBE(test model.PostTest) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
 	var questionArray []int32 = test.Questions[0:]
 	list := make([]model.Question, 0)
@@ -60,6 +60,8 @@ func CreateTest(test model.PostTest) error {
 		TotalQuestion: test.TotalQuestion,
 		Subject:       test.Subject,
 		Questions:     list,
+		TopicID:       test.TopicID,
+		Level:         test.Level,
 		Type:          test.Type,
 	}
 	err := InsertToCollection(body, body.Subject) //model.TestDB.Collection.InsertOne(context.TODO(), body)
@@ -70,18 +72,34 @@ func CreateTest(test model.PostTest) error {
 	}
 	return nil
 }
+func CreateTest(test model.Test) error {
+	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
 
+	err := InsertToCollection(test, test.Subject) //model.TestDB.Collection.InsertOne(context.TODO(), body)
+
+	if err != nil {
+		log.Println("test_repo.go/CreateTest: Error Inserting", err.Error())
+		return err
+	}
+	return nil
+}
 func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	filter := bson.M{}
 	if query.Subject != "" {
 		filter["Subject"] = query.Subject
-		if query.Name != "" {
-			filter["Name"] = query.Name
-		}
-		if query.TestID != 0 {
-			filter["TestID"] = query.TestID
-		}
 
+	}
+	if query.Name != "" {
+		filter["Name"] = query.Name
+	}
+	if query.TestID != 0 {
+		filter["TestID"] = query.TestID
+	}
+	if query.Level != 0 {
+		filter["Level"] = query.Level
+	}
+	if len(query.TopicID)-1 != 0 {
+		filter["TopicID"] = query.TopicID
 	}
 
 	list := make([]model.Test, 0)
