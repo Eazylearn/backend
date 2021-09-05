@@ -61,18 +61,17 @@ func GetProfileAction(c echo.Context) error {
 	userId, _ := strconv.ParseInt(id, 10, 64)
 	profile, err := repo.GetProfileByID(userId)
 	if err != nil {
-		api.Respond(c, &enum.APIResponse{
+		return api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf(err.Error()),
 		})
-		return nil
 	}
-	api.Respond(c, &enum.APIResponse{
+	fmt.Println(profile)
+	return api.Respond(c, &enum.APIResponse{
 		Status:  enum.APIStatus.Ok,
-		Message: fmt.Sprintln("Success"),
+		Message: "Success",
 		Data:    profile,
 	})
-	return nil
 }
 
 // Return a user by id

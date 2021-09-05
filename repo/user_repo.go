@@ -43,6 +43,8 @@ func GetProfileByID(id int64) (model.Profile, error) {
 		log.Println("user_repo.go/FindUserByID: Error finding result", rErr.Error())
 		return profile, rErr
 	}
+	log.Println(user)
+	log.Println(result)
 	profile.UserID = user.UserID
 	profile.FirstName = user.FirstName
 	profile.LastName = user.LastName
@@ -57,6 +59,7 @@ func GetProfileByID(id int64) (model.Profile, error) {
 		profile.AverageScore += float64(score)
 	}
 	profile.AverageScore /= float64(profile.TotalTest)
+	log.Println(profile)
 	return profile, nil
 }
 

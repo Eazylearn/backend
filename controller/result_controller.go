@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"log"
+
+	"github.com/CS426FinalProject/model"
 	"github.com/labstack/echo/v4"
 )
 
@@ -19,6 +22,7 @@ func CreateResultAction(c echo.Context) error {
 }
 
 func SubmitTestAction(c echo.Context) error {
-	
+	var body model.Result
+	log.Print(body)
 	return nil
 }
