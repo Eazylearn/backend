@@ -141,12 +141,12 @@ func UpdateUser(users []map[string]interface{}) error {
 	return nil
 }
 
-func IsUserExist(username, password string) (bool, error) {
+func IsUserExist(username, password string) (bool, int64, error) {
 	result, err := model.UserDB.Collection.Find(context.TODO(), bson.M{"username": username, "password": password})
 	list := make([]model.User, 0)
 	result.All(context.TODO(), &list)
 	if err != nil || len(list) == 0 {
-		return false, err
+		return false, -1, err
 	}
-	return true, nil
+	return true, list[0].UserID, nil
 }

@@ -27,7 +27,7 @@ func LoginAction(c echo.Context) error {
 	}
 	username := body["username"]
 	password := body["password"]
-	exist, e := repo.IsUserExist(username, password)
+	exist, id, e := repo.IsUserExist(username, password)
 	if e != nil {
 		api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
@@ -47,7 +47,7 @@ func LoginAction(c echo.Context) error {
 	api.Respond(c, &enum.APIResponse{
 		Status:  enum.APIStatus.Ok,
 		Message: "Success",
-		Data:    exist,
+		Data:    id,
 	})
 	return nil
 }
