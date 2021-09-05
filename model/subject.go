@@ -7,8 +7,8 @@ import (
 
 type Subject struct {
 	// Basic information
-	SubjectID int64  `json:"subjectId" bson:"subjectId"`
-	Name      string `json:"name", bson:"name"`
+	SubjectID string `json:"subjectId" bson:"subjectId"`
+	Name      string `json:"name" bson:"name"`
 }
 
 var SubjectDB = &db.Instance{
