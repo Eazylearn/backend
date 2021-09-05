@@ -2,16 +2,16 @@ package repo
 
 import (
 	"context"
-	"fmt"
-	"log"
-	"strconv"
-
 	"github.com/CS426FinalProject/model"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"log"
+	"sort"
+	"strconv"
+	"strings"
+	//	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func InsertToCollection(test model.Test, collection string) error {
+/*func InsertToCollection(test model.Test, collection string) error {
 	if collection == "English" {
 		_, err := model.Test_ENGDB.Collection.InsertOne(context.TODO(), test)
 		return err
@@ -46,6 +46,7 @@ func FindInCollection(filter bson.M, collection string) (*mongo.Cursor, error) {
 	return nil, nil
 	//_, err := model.Test_ENGDB.Collection.InsertOne(context.TODO(), test)
 }
+*/
 func CreateTestByBE(test model.PostTest) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
 	var questionArray []int64 = test.Questions[0:]
@@ -62,17 +63,19 @@ func CreateTestByBE(test model.PostTest) error {
 	}
 
 	body := model.Test{
-		TestID:        test.TestID,
+		TestId:        test.TestId,
 		Name:          test.Name,
 		TotalQuestion: test.TotalQuestion,
 		Subject:       test.Subject,
 		Questions:     list,
-		TopicID:       test.TopicID,
+		TopicId:       test.TopicId,
 		Level:         test.Level,
 		Type:          test.Type,
 	}
-	err := InsertToCollection(body, body.Subject) //model.TestDB.Collection.InsertOne(context.TODO(), body)
+	sort.Strings(body.TopicId)
+	//err := InsertToCollection(body, body.Subject) //
 
+	_, err := model.TestDB.Collection.InsertOne(context.TODO(), body)
 	if err != nil {
 		log.Println("test_repo.go/CreateTest: Error Inserting", err.Error())
 		return err
@@ -82,13 +85,18 @@ func CreateTestByBE(test model.PostTest) error {
 func CreateTest(test model.Test) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
 
-	err := InsertToCollection(test, test.Subject) //model.TestDB.Collection.InsertOne(context.TODO(), body)
+	//err := InsertToCollection(test, test.Subject) //
+	sort.Strings(test.TopicId)
+	_, err := model.TestDB.Collection.InsertOne(context.TODO(), test)
 
 	if err != nil {
 		log.Println("test_repo.go/CreateTest: Error Inserting", err.Error())
 		return err
 	}
 	return nil
+}
+func RemoveIndex(s []model.Test, index int) []model.Test {
+	return append(s[:index], s[index+1:]...)
 }
 func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	filter := bson.M{}
@@ -99,23 +107,74 @@ func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	if query.Name != "" {
 		filter["Name"] = query.Name
 	}
-	if query.TestID != 0 {
-		filter["TestID"] = query.TestID
+	if query.TestId != 0 {
+		filter["TestId"] = query.TestId
 	}
 	if query.Level != 0 {
 		filter["Level"] = query.Level
 	}
-	if len(query.TopicID)-1 != 0 {
-		filter["TopicID"] = query.TopicID
+	if len(query.TopicId) == 1 {
+		filter["TopicId"] = query.TopicId
 
 	}
 
 	list := make([]model.Test, 0)
-	result, err := FindInCollection(filter, query.Subject)
+	//result, err := FindInCollection(filter, query.Subject)
+	result, err := model.TestDB.Collection.Find(context.TODO(), filter)
 	if err != nil {
 		log.Println("test_repo/GetAllTestByQuery: error FindInCollection", err.Error())
 		return list, err
 	}
+
 	result.All(context.TODO(), &list)
+	if len(query.TopicId) > 1 {
+
+		//sort.Strings(query.TopicId)
+		for i := 0; i < len(query.TopicId); i++ {
+			var a string = query.TopicId[i]
+			filter[a] = a
+		}
+		for i := 0; i < len(list); i++ {
+			var topics []string = list[i].TopicId
+			for j := 0; j < len(topics); j++ {
+				if filter[topics[j]] != topics[j] {
+					list = RemoveIndex(list, i)
+					continue
+				}
+			}
+		}
+
+	}
 	return list, nil
+}
+func GetTestTotalQuestion(TestID int64) (int64, error) {
+	var test model.Test
+	err := model.TestDB.Collection.FindOne(context.TODO(), bson.M{"TestId": TestID}).Decode(&test)
+
+	if err != nil {
+		log.Println("test_repo/GetTestTotalQuestion: Cannot find test id", err.Error())
+		return 0, err
+	}
+
+	return test.TotalQuestion, nil
+}
+func GetTestTotalCorrect(TestID int64, Answers []string) (int64, error) {
+	var test model.Test
+	err := model.TestDB.Collection.FindOne(context.TODO(), bson.M{"TestId": TestID}).Decode(&test)
+
+	if err != nil {
+		log.Println("test_repo/GetTestTotalCorrect: Cannot find test id", err.Error())
+		return 0, err
+	}
+	var questions []model.Question = test.Questions
+	var score int64 = 0
+	for i := 0; i < len(questions); i++ {
+		var qAnswer string = strings.TrimSpace(questions[i].Answer)
+		if qAnswer == strings.TrimSpace(Answers[i]) {
+			score++
+		}
+
+	}
+	return score, nil
+
 }
