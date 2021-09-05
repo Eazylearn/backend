@@ -11,7 +11,7 @@ type Question struct {
 	Name string `json:"name,omitempty" bson:"Name,omitempty"`
 
 	Content     string `json:"content,omitempty" bson:"Content,omitempty"`
-	Answer      string `json:"cnswer,omitempty" bson:"Answer,omitempty"`
+	Answer      string `json:"answer,omitempty" bson:"Answer,omitempty"`
 	Reason      string `json:"reason,omitempty" bson:"Reason,omitempty"`
 	Type        string `json:"type,omitempty" bson:"Type,omitempty" `
 	Requirement string `json:"requirement,omitempty" bson:"Requirement,omitempty"`

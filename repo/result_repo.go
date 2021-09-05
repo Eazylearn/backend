@@ -29,9 +29,9 @@ func GetResultScore(result model.Result) float64 {
 	var score float64
 	score = 0
 
-	totalQuestion := GetTestTotalQuestion(result.TestID)
+	//totalQuestion := GetTestTotalQuestion(result.TestID)
 
-	score = float64(result.TotalCorrect) / float64(totalQuestion)
+	//score = float64(result.TotalCorrect) / float64(totalQuestion)
 
 	return score
 }
