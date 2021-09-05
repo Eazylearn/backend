@@ -3,8 +3,8 @@ package repo
 import (
 	"context"
 	"fmt"
-
 	"log"
+	"strconv"
 
 	"github.com/CS426FinalProject/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -48,13 +48,15 @@ func FindInCollection(filter bson.M, collection string) (*mongo.Cursor, error) {
 }
 func CreateTestByBE(test model.PostTest) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
-	var questionArray []int32 = test.Questions[0:]
+	var questionArray []int64 = test.Questions[0:]
 	list := make([]model.Question, 0)
 	//questions:= []model.Question{}
 	for i := 0; i < len(questionArray); i++ {
-		questions, qErr := GetQuestioByIndex(string(questionArray[i]))
+		var a int64 = questionArray[i]
+		questions, qErr := GetQuestioByIndex(a)
 		if qErr != nil {
-			log.Println("test_repo.go/CreateTest: Error finding QuestionID"+string(questionArray[i]), qErr.Error())
+
+			log.Println("test_repo.go/CreateTest: Error finding QuestionID   "+strconv.FormatInt(a, 10), qErr.Error())
 		}
 		list = append(list, questions)
 	}
@@ -105,6 +107,7 @@ func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	}
 	if len(query.TopicID)-1 != 0 {
 		filter["TopicID"] = query.TopicID
+
 	}
 
 	list := make([]model.Test, 0)

@@ -3,12 +3,12 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/CS426FinalProject/api"
 	"github.com/CS426FinalProject/enum"
 	"github.com/CS426FinalProject/model"
 	"github.com/CS426FinalProject/repo"
 	"github.com/labstack/echo/v4"
+	"strconv"
 )
 
 // ********** Main function for managing path ********** //
@@ -98,14 +98,15 @@ func GetAllQuestionByTopicIdAction(c echo.Context) error {
 }
 func GetQuestioByIndexAction(c echo.Context) error {
 	index := c.QueryParams().Get("index")
-	if index == "" {
+	n, err := strconv.ParseInt(index, 10, 64)
+	if n == 0 {
 		api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Invalid,
 			Message: fmt.Sprintln("question_controller/GetQuestioByIndexAction: Empty index"),
 		})
 		return nil
 	}
-	question, err := repo.GetQuestioByIndex(index)
+	question, err := repo.GetQuestioByIndex(n)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,

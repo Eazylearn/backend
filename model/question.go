@@ -16,7 +16,7 @@ type Question struct {
 	Type        string `json:"type,omitempty" bson:"Type,omitempty" `
 	Requirement string `json:"requirement,omitempty" bson:"Requirement,omitempty"`
 	Index       int64  `json:"index,omitempty" bson:"Index,omitempty"`
-	Subject     string `json:"subject,omitempty" bson:"Subject,omitempty"`
+	SubjectId   string `json:"subjectId,omitempty" bson:"SubjectId,omitempty"`
 	Choices     string `json:"choices,omitempty" bson:"Choices,omitempty"`
 	// Foreign keys
 	TestId  string `json:"testId,omitempty" bson:"TestId,omitempty" `
