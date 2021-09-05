@@ -32,16 +32,6 @@ type User struct {
 	AvgScore  float64 `json:"avgScore" bson:"avgScore"`
 }
 
-type Profile struct {
-	// Basic information
-	UserID    int64  `json:"id" bson:"id"`
-	FirstName string `json:"firstName" bson:"firstName"`
-	LastName  string `json:"lastName" bson:"lastName"`
-
-	// Relative information
-	Dob time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
-}
-
 func (u User) String() string {
 	ujson, _ := json.Marshal(u)
 	return string(ujson)

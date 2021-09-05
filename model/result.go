@@ -13,11 +13,9 @@ type Result struct {
 	TimeEnd   time.Time `json:"timeEnd" json:"timeEnd"`
 
 	// Relative information
-	Answer           [100]string `json:"answer" bson:"answer"`
-	
-	TotalCorrect     int32       `json:"totalCorrect" bson:"totalCorrect"`
-	AnsweredQuestion int32       `json:"answeredQuestion" bson:"answeredQuestion"`
-	TotalTime        int64       `json:"totalTime" json:"totalTime"`
+	Answer       [100]string `json:"answer" bson:"answer"`
+	TotalCorrect int32       `json:"totalCorrect" bson:"totalCorrect"`
+	TotalTime    int64       `json:"totalTime" json:"totalTime"`
 
 	// Foreign keys
 	UserID int64 `json:"userId"`
