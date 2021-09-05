@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/CS426FinalProject/model"
@@ -126,7 +125,6 @@ func UpdateUser(users []map[string]interface{}) error {
 				filter = bson.M{key: value}
 			}
 		}
-		fmt.Println(updates)
 		result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, updates)
 		if err != nil {
 			log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
@@ -139,21 +137,6 @@ func UpdateUser(users []map[string]interface{}) error {
 		if result.UpsertedCount != 0 {
 			log.Printf("inserted a new document with ID %v\n", result.UpsertedID)
 		}
-		// for _, update := range updates {
-		// 	result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, update)
-		// 	if err != nil {
-		// 		log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
-		// 		return err
-		// 	}
-
-		// 	if result.MatchedCount != 0 {
-		// 		log.Println("user_repo.go/EditUser: Matched and replaced an existing document")
-		// 		return nil
-		// 	}
-		// 	if result.UpsertedCount != 0 {
-		// 		log.Printf("inserted a new document with ID %v\n", result.UpsertedID)
-		// 	}
-		// }
 	}
 	return nil
 }
