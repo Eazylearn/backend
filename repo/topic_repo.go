@@ -41,3 +41,15 @@ func GetAllTopicBySubjectID(subjectId string) ([]model.Topic, error) {
 	result.All(context.TODO(), &list)
 	return list, nil
 }
+
+func GetTopicByID(id string) (model.Topic, error) {
+	var topic model.Topic
+	log.Println(id)
+	err := model.TopicDB.Collection.FindOne(context.TODO(), bson.D{{"topicId", id}}).Decode(&topic)
+	log.Println(topic)
+	if err != nil {
+		log.Println("topic_repo.go/GetTopicByID: Error finding", err.Error())
+		return topic, err
+	}
+	return topic, nil
+}
