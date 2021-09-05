@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"log"
 
 	"github.com/CS426FinalProject/model"
@@ -13,19 +14,24 @@ func CreateUser(users []model.User) ([]model.User, error) {
 	lastestID, _ := model.UserDB.Collection.CountDocuments(context.TODO(), bson.D{})
 	list := make([]model.User, 0)
 	for i := 0; i < len(users); i++ {
-		lastestID = lastestID + 1
-		users[i].UserID = lastestID
-		_, err := model.UserDB.Collection.InsertOne(context.TODO(), users[i])
-		if err != nil {
-			return list, err
-		}
+		exist := IsUsernameExist(users[i].Username)
+		if !exist {
+			lastestID = lastestID + 1
+			users[i].UserID = lastestID
+			_, err := model.UserDB.Collection.InsertOne(context.TODO(), users[i])
+			if err != nil {
+				return list, err
+			}
 
-		var user model.User
-		user, findErr := GetUserByID(lastestID)
-		if findErr != nil {
-			return list, findErr
+			var user model.User
+			user, findErr := GetUserByID(lastestID)
+			if findErr != nil {
+				return list, findErr
+			}
+			list = append(list, user)
+		} else {
+			return list, errors.New("Username exists")
 		}
-		list = append(list, user)
 	}
 	return list, nil
 }
@@ -165,4 +171,14 @@ func IsUserExist(username, password string) (bool, int64, error) {
 		return false, -1, err
 	}
 	return true, list[0].UserID, nil
+}
+
+func IsUsernameExist(username string) bool {
+	result, err := model.UserDB.Collection.Find(context.TODO(), bson.M{"username": username})
+	list := make([]model.User, 0)
+	result.All(context.TODO(), &list)
+	if err != nil || len(list) == 0 {
+		return false
+	}
+	return true
 }

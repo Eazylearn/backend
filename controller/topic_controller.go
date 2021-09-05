@@ -14,8 +14,8 @@ import (
 func TopicControllerGroup(g *echo.Group) error {
 	g.POST("/create", CreateTopicAction)
 	g.GET("s", GetAllTopicAction)
-	// g.GET("/CreateTopics", CreateTopicsAction)
 	g.GET("/all", GetAllTopicBySubjectIDAction)
+	g.GET("/find", GetTopicByIDAction)
 	return nil
 }
 
@@ -72,6 +72,32 @@ func GetAllTopicBySubjectIDAction(c echo.Context) error {
 		Status:  enum.APIStatus.Ok,
 		Message: fmt.Sprintln("Success"),
 		Data:    topics,
+	})
+	return nil
+}
+
+func GetTopicByIDAction(c echo.Context) error {
+	id := c.QueryParams().Get("id")
+	if id == "" {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: fmt.Sprintln("topic_controller/GetTopicByIDAction: Empty ID"),
+		})
+		return nil
+	}
+	fmt.Println(id)
+	topic, err := repo.GetTopicByID(id)
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("topic_controller/GetTopicByIDAction: Error " + err.Error()),
+		})
+		return nil
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Message: fmt.Sprintln("Success"),
+		Data:    topic,
 	})
 	return nil
 }
