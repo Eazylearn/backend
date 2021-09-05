@@ -22,6 +22,11 @@ func InsertToCollection(test model.Test, collection string) error {
 		return err
 		//return err
 	}
+	if collection == "Physic" {
+		_, err := model.Test_PHYDB.Collection.InsertOne(context.TODO(), test)
+		return err
+		//return err
+	}
 	fmt.Printf("test_repo.go/CreateTest: Error cannot find subject or collection name")
 	return nil
 	//_, err := model.Test_ENGDB.Collection.InsertOne(context.TODO(), test)

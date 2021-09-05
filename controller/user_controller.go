@@ -135,7 +135,7 @@ func UpdatePasswordAction(c echo.Context) error {
 }
 
 func EditUserAction(c echo.Context) error {
-	var body []model.User
+	var body []map[string]interface{}
 	err := api.GetContent(c, &body)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{

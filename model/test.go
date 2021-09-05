@@ -40,8 +40,12 @@ var Test_ENGDB = &db.Instance{
 var Test_MTHDB = &db.Instance{
 	CollectionName: "test_MTH",
 }
+var Test_PHYDB = &db.Instance{
+	CollectionName: "test_PHYDB",
+}
 
 func InitTestDB(db *mongo.Database) {
 	Test_ENGDB.ApplyDatabase(db)
 	Test_MTHDB.ApplyDatabase(db)
+	Test_PHYDB.ApplyDatabase(db)
 }

@@ -27,6 +27,18 @@ func GetAllTopic() ([]model.Topic, error) {
 		return list, err
 	}
 	result.All(context.TODO(), &list)
+	log.Println(list)
+	return list, nil
+}
+
+func GetAllTopicBySubjectID(subjectID int64) ([]model.Topic, error) {
+	list := make([]model.Topic, 0)
+	result, err := model.TopicDB.Collection.Find(context.TODO(), bson.D{{"subjectId", subjectID}})
+	if err != nil {
+		log.Println("topic_repo/GetAllTopicBySubjectID: ", err.Error())
+		return list, err
+	}
+	result.All(context.TODO(), &list)
 	return list, nil
 }
 
