@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -37,9 +36,11 @@ func InitServer() *APIServer {
 	server.Echo.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 	}))
-	//server.Echo.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
-	//	return repo.IsUserExist(username, password)
-	//}))
+
+	// server.Echo.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+	// 	return repo.IsUserExist(username, password)
+	// }))
+
 	return server
 }
 
@@ -97,6 +98,5 @@ func GetContentText(c echo.Context) string {
 	if c.Request().Body != nil {
 		bodyBytes, _ = ioutil.ReadAll(c.Request().Body)
 	}
-	fmt.Println(string(bodyBytes))
 	return string(bodyBytes)
 }

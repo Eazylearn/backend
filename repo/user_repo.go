@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/CS426FinalProject/model"
@@ -34,16 +33,30 @@ func CreateUser(users []model.User) ([]model.User, error) {
 // Return profile by id
 func GetProfileByID(id int64) (model.Profile, error) {
 	var profile model.Profile
-	var user model.User
-	err := model.UserDB.Collection.FindOne(context.TODO(), bson.D{{"userId", id}}).Decode(&user)
-	if err != nil {
-		log.Println("user_repo.go/FindUserByID: Error finding", err.Error())
-		return profile, err
+	user, uErr := GetUserByID(id)
+	result, rErr := GetResultByUserID(id)
+	if uErr != nil {
+		log.Println("user_repo.go/FindUserByID: Error finding user", uErr.Error())
+		return profile, uErr
+	}
+	if rErr != nil {
+		log.Println("user_repo.go/FindUserByID: Error finding result", rErr.Error())
+		return profile, rErr
 	}
 	profile.UserID = user.UserID
 	profile.FirstName = user.FirstName
 	profile.LastName = user.LastName
 	profile.Dob = user.Dob
+	profile.Address = user.Address
+	profile.Phone = user.Phone
+	profile.Email = user.Email
+	profile.TotalTest = len(result)
+	profile.AverageScore = 0
+	for i := 0; i < len(result); i++ {
+		score := GetResultScore(result[i])
+		profile.AverageScore += float64(score)
+	}
+	profile.AverageScore /= float64(profile.TotalTest)
 	return profile, nil
 }
 
@@ -126,7 +139,6 @@ func UpdateUser(users []map[string]interface{}) error {
 				filter = bson.M{key: value}
 			}
 		}
-		fmt.Println(updates)
 		result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, updates)
 		if err != nil {
 			log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
@@ -139,31 +151,16 @@ func UpdateUser(users []map[string]interface{}) error {
 		if result.UpsertedCount != 0 {
 			log.Printf("inserted a new document with ID %v\n", result.UpsertedID)
 		}
-		// for _, update := range updates {
-		// 	result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, update)
-		// 	if err != nil {
-		// 		log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
-		// 		return err
-		// 	}
-
-		// 	if result.MatchedCount != 0 {
-		// 		log.Println("user_repo.go/EditUser: Matched and replaced an existing document")
-		// 		return nil
-		// 	}
-		// 	if result.UpsertedCount != 0 {
-		// 		log.Printf("inserted a new document with ID %v\n", result.UpsertedID)
-		// 	}
-		// }
 	}
 	return nil
 }
 
-func IsUserExist(username, password string) (bool, error) {
+func IsUserExist(username, password string) (bool, int64, error) {
 	result, err := model.UserDB.Collection.Find(context.TODO(), bson.M{"username": username, "password": password})
 	list := make([]model.User, 0)
 	result.All(context.TODO(), &list)
 	if err != nil || len(list) == 0 {
-		return false, err
+		return false, -1, err
 	}
-	return true, nil
+	return true, list[0].UserID, nil
 }

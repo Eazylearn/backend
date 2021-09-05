@@ -9,20 +9,17 @@ import (
 
 type Result struct {
 	// Basic information
-	ResultID  int64      `json:"resultId" bson:"resultId"`
-	TimeStart *time.Time `json:"timeStart,omitempty" json:"timeStart,omitempty"`
-	TimeEnd   *time.Time `json:"timeEnd,omitempty" json:"timeEnd,omitempty"`
+	TimeStart time.Time `json:"timeStart" json:"timeStart"`
+	TimeEnd   time.Time `json:"timeEnd" json:"timeEnd"`
 
 	// Relative information
-	Answer           [1000]string `json:"answer,omitempty" bson:"answer,omitempty"`
-	TotalCorrect     int32        `json:"totalCorrect,omitempty" bson:"totalCorrect,omitempty"`
-	TotalIncorrect   int32        `json:"totalIncorrect,omitempty" bson:"totalIncorrect,omitempty"`
-	AnsweredQuestion int32        `json:"answeredQuestion,omitempty" bson:"answeredQuestion,omitempty"`
-	TotalTime        *time.Time   `json:"totalTime,omitempty" json:"totalTime,omitempty"`
+	Answer       [100]string `json:"answer" bson:"answer"`
+	TotalCorrect int32       `json:"totalCorrect" bson:"totalCorrect"`
+	TotalTime    int64       `json:"totalTime" json:"totalTime"`
 
 	// Foreign keys
-	UserID int64 `json:"userId,omitempty"`
-	TestID int64 `json:"testId,omitempty"`
+	UserID int64 `json:"userId"`
+	TestID int64 `json:"testId"`
 }
 
 var ResultDB = &db.Instance{
