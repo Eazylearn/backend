@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/CS426FinalProject/api"
 	"github.com/CS426FinalProject/enum"
@@ -15,6 +16,7 @@ func TopicControllerGroup(g *echo.Group) error {
 	g.POST("/create", CreateTopicAction)
 	g.GET("s", GetAllTopicAction)
 	// g.GET("/CreateTopics", CreateTopicsAction)
+	g.GET("/all", GetAllTopicBySubjectIDAction)
 	return nil
 }
 
@@ -42,6 +44,25 @@ func CreateTopicAction(c echo.Context) error {
 
 func GetAllTopicAction(c echo.Context) error {
 	topics, err := repo.GetAllTopic()
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf(err.Error()),
+		})
+		return nil
+	}
+	api.Respond(c, &enum.APIResponse{
+		Status:  enum.APIStatus.Ok,
+		Message: fmt.Sprintln("Success"),
+		Data:    topics,
+	})
+	return nil
+}
+
+func GetAllTopicBySubjectIDAction(c echo.Context) error {
+	id := c.QueryParam("subjectId")
+	subjectID, _ := strconv.ParseInt(id, 10, 64)
+	topics, err := repo.GetAllTopicBySubjectID(subjectID)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,

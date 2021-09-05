@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/CS426FinalProject/enum"
+	"github.com/CS426FinalProject/repo"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -35,6 +36,9 @@ func InitServer() *APIServer {
 	server := &APIServer{Echo: echo.New()}
 	server.Echo.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
+	}))
+	server.Echo.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		return repo.IsUserExist(username, password)
 	}))
 	return server
 }

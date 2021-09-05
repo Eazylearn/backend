@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/CS426FinalProject/model"
@@ -114,16 +115,23 @@ func UpdatePassword(id int64, pwd string) error {
 	return nil
 }
 
-func UpdateUser(users []model.User) error {
+func UpdateUser(users []map[string]interface{}) error {
 	for i := 0; i < len(users); i++ {
-		filter := bson.D{{"userId", users[i].UserID}}
-		update := bson.D{{"$set", bson.D{{"firstName", "test firstname"},}},}
-		result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, update)
+		var updates []bson.M
+		var filter bson.M
+		for key, value := range users[i] {
+			if key != "userId" {
+				updates = append(updates, bson.M{"$set": bson.M{key: value}})
+			} else {
+				filter = bson.M{key: value}
+			}
+		}
+		fmt.Println(updates)
+		result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, updates)
 		if err != nil {
 			log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
 			return err
 		}
-	
 		if result.MatchedCount != 0 {
 			log.Println("user_repo.go/EditUser: Matched and replaced an existing document")
 			return nil
@@ -131,6 +139,31 @@ func UpdateUser(users []model.User) error {
 		if result.UpsertedCount != 0 {
 			log.Printf("inserted a new document with ID %v\n", result.UpsertedID)
 		}
+		// for _, update := range updates {
+		// 	result, err := model.UserDB.Collection.UpdateOne(context.TODO(), filter, update)
+		// 	if err != nil {
+		// 		log.Println("user_repo.go/EditUser: Find and update fail ", err.Error())
+		// 		return err
+		// 	}
+
+		// 	if result.MatchedCount != 0 {
+		// 		log.Println("user_repo.go/EditUser: Matched and replaced an existing document")
+		// 		return nil
+		// 	}
+		// 	if result.UpsertedCount != 0 {
+		// 		log.Printf("inserted a new document with ID %v\n", result.UpsertedID)
+		// 	}
+		// }
 	}
 	return nil
+}
+
+func IsUserExist(username, password string) (bool, error) {
+	result, err := model.UserDB.Collection.Find(context.TODO(), bson.M{"username": username, "password": password})
+	list := make([]model.User, 0)
+	result.All(context.TODO(), &list)
+	if err != nil || len(list) == 0 {
+		return false, err
+	}
+	return true, nil
 }
