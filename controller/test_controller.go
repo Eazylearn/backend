@@ -15,7 +15,7 @@ import (
 // ********** Main function for managing path ********** //
 func TestControllerGroup(g *echo.Group) error {
 	g.POST("/create", CreateTestAction)
-	g.POST("/createbyBE", CreateTestAction)
+	g.POST("/createbyBE", CreateTestByBEAction)
 	g.GET("/", GetAllTestByQueryAtcion)
 
 	return nil
