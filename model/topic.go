@@ -9,9 +9,9 @@ import (
 
 type Topic struct {
 	// Basic information
-	TopicID   int64  `json:"topicId" bson:"topicId"`
-	Name      string `json:"name", bson:"name"`
-	SubjectID int64  `json:"subjectId" bson:"subjectId"`
+	TopicID   string `json:"topicId" bson:"topicId"`
+	Name      string `json:"name" bson:"name"`
+	SubjectID string `json:"subjectId" bson:"subjectId"`
 }
 
 func (t Topic) String() string {

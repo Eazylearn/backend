@@ -60,9 +60,8 @@ func GetAllTopicAction(c echo.Context) error {
 }
 
 func GetAllTopicBySubjectIDAction(c echo.Context) error {
-	id := c.QueryParam("subjectId")
-	subjectID, _ := strconv.ParseInt(id, 10, 64)
-	topics, err := repo.GetAllTopicBySubjectID(subjectID)
+	subjectId := c.QueryParam("subjectId")
+	topics, err := repo.GetAllTopicBySubjectID(subjectId)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
