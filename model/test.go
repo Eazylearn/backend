@@ -17,7 +17,7 @@ type PostTest struct {
 	Level         int64  `json:"level,omitempty"  bson:"Level,omitempty"`
 	// Foreign keys
 	TopicID   []string `json:"topicId,omitempty"   bson:"TopicID"` // Reference to topic.go
-	Questions []int32  `json:"questions,omitempty"`
+	Questions []int64  `json:"questions,omitempty"`
 }
 type Test struct {
 	// Basic information of test

@@ -24,13 +24,6 @@ func TestControllerGroup(g *echo.Group) error {
 //////////////////////////////////////////////////////////
 
 // Testing root path of user page
-func TestPage(c echo.Context) error {
-	api.Respond(c, &enum.APIResponse{
-		Status:  enum.APIStatus.Ok,
-		Message: fmt.Sprintf("Test Page"),
-	})
-	return nil
-}
 
 // Create a test
 

@@ -36,9 +36,11 @@ func InitServer() *APIServer {
 	server.Echo.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 	}))
+
 	// server.Echo.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 	// 	return repo.IsUserExist(username, password)
 	// }))
+
 	return server
 }
 

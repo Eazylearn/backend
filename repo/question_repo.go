@@ -29,6 +29,10 @@ func GetAllQuestionByQuery(query *model.GetQuestionRequest) ([]model.Question, e
 	if query.Level != 0 {
 		filter["Level"] = query.Level
 	}
+	if query.SubjectId != "" {
+		filter["SubjectId"] = query.SubjectId
+	}
+
 	list := make([]model.Question, 0)
 	result, err := model.QuestionDB.Collection.Find(context.TODO(), filter)
 	if err != nil {
@@ -71,17 +75,12 @@ func GetAllQuestionByTopicId(topicId string) ([]model.Question, error) {
 	result.All(context.TODO(), &list)
 	return list, nil
 }
-func GetQuestioByIndex(index string) (model.Question, error) {
+func GetQuestioByIndex(index int64) (model.Question, error) {
 	var question model.Question
-	result, qErr := model.QuestionDB.Collection.Find(context.TODO(), bson.M{"Index": index})
+	err := model.QuestionDB.Collection.FindOne(context.TODO(), bson.M{"Index": index}).Decode(&question)
 
-	if qErr != nil {
-		log.Println("question_repo/GetQuestioByIndex: ", qErr.Error())
-		return question, qErr
-	}
-	err := result.All(context.TODO(), &question)
 	if err != nil {
-		log.Println("question_repo.go/GetQuestioByIndex: Error encoding", err.Error())
+		log.Println("question_repo/GetQuestioByIndex: ", err.Error())
 		return question, err
 	}
 
