@@ -6,9 +6,7 @@ import (
 
 // ********** Main function for managing path ********** //
 func ResultControllerGroup(g *echo.Group) error {
-	// g.GET("/getResult", )
-	// g.POST("/finishTest", )
-	// g.POST("/testResult", )
+	g.GET("/submit", SubmitTestAction)
 	return nil
 }
 
@@ -17,5 +15,10 @@ func ResultControllerGroup(g *echo.Group) error {
 // Create a test
 func CreateResultAction(c echo.Context) error {
 
+	return nil
+}
+
+func SubmitTestAction(c echo.Context) error {
+	
 	return nil
 }

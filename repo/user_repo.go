@@ -33,16 +33,30 @@ func CreateUser(users []model.User) ([]model.User, error) {
 // Return profile by id
 func GetProfileByID(id int64) (model.Profile, error) {
 	var profile model.Profile
-	var user model.User
-	err := model.UserDB.Collection.FindOne(context.TODO(), bson.D{{"userId", id}}).Decode(&user)
-	if err != nil {
-		log.Println("user_repo.go/FindUserByID: Error finding", err.Error())
-		return profile, err
+	user, uErr := GetUserByID(id)
+	result, rErr := GetResultByUserID(id)
+	if uErr != nil {
+		log.Println("user_repo.go/FindUserByID: Error finding user", uErr.Error())
+		return profile, uErr
+	}
+	if rErr != nil {
+		log.Println("user_repo.go/FindUserByID: Error finding result", rErr.Error())
+		return profile, rErr
 	}
 	profile.UserID = user.UserID
 	profile.FirstName = user.FirstName
 	profile.LastName = user.LastName
 	profile.Dob = user.Dob
+	profile.Address = user.Address
+	profile.Phone = user.Phone
+	profile.Email = user.Email
+	profile.TotalTest = len(result)
+	profile.AverageScore = 0
+	for i := 0; i < len(result); i++ {
+		score := GetResultScore(result[i])
+		profile.AverageScore += float64(score)
+	}
+	profile.AverageScore /= float64(profile.TotalTest)
 	return profile, nil
 }
 

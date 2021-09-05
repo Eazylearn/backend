@@ -8,17 +8,6 @@ import (
 )
 
 func CreateResult(result model.Result) error {
-	// return &Result{
-	//		resultId: 1,
-	//		timeStart: ,
-	//		timeEnd: ,
-	//		totalCorrect: 0,
-	//		totalIncorrect: 0,
-	//		answeredQuestion: 0,
-	//		totalTime: ,
-	//		userId: 1,
-	//		testId: 1
-	//				}
 	_, err := model.ResultDB.Collection.InsertOne(context.TODO(), result)
 	if err != nil {
 		return err
@@ -34,4 +23,15 @@ func GetResultByUserID(userId int64) ([]model.Result, error) {
 		return list, err
 	}
 	return list, nil
+}
+
+func GetResultScore(result model.Result) float64 {
+	var score float64
+	score = 0
+
+	totalQuestion := GetTestTotalQuestion(result.TestID)
+
+	score = float64(result.TotalCorrect) / float64(totalQuestion)
+
+	return score
 }
