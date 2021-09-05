@@ -72,6 +72,7 @@ func CreateTestByBE(test []model.PostTest) error {
 			TopicId:       test[i].TopicId,
 			Level:         test[i].Level,
 			Type:          test[i].Type,
+			SubjectId:     test[i].SubjectId,
 		}
 		sort.Strings(body.TopicId)
 		//err := InsertToCollection(body, body.Subject) //

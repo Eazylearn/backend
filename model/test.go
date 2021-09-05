@@ -7,9 +7,9 @@ import (
 
 type PostTest struct {
 	// Basic information of test
-	TestId int64  `json:"testId,omitempty" bson:"testId,omitempty"`
-	Name   string `json:"name,omitempty" bson:"Name,omitempty"`
-
+	TestId    int64  `json:"testId,omitempty" bson:"testId,omitempty"`
+	Name      string `json:"name,omitempty" bson:"Name,omitempty"`
+	SubjectId string `json:"subjectId,omitempty"  bson:"SubjectId,omitempty"`
 	// Relative information of test
 	TotalQuestion int64  `json:"totalQuestion,omitempty"`
 	Subject       string `json:"subject,omitempty"  bson:"Subject,omitempty"`
@@ -27,6 +27,7 @@ type Test struct {
 	// Relative information of test
 	TotalQuestion int64  `json:"totalQuestion,omitempty"  bson:"TotalQuestion,omitempty"`
 	Subject       string `json:"subject,omitempty"  bson:"Subject,omitempty"`
+	SubjectId     string `json:"subjectId,omitempty"  bson:"SubjectId,omitempty"`
 	Type          string `json:"type,omitempty"  bson:"Type,omitempty"` //combination v 1 subject
 	Level         int64  `json:"level,omitempty"  bson:"Level,omitempty"`
 	// Foreign keys
