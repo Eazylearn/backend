@@ -17,6 +17,7 @@ func UserControllerGroup(g *echo.Group) error {
 	g.GET("/find", GetUserByIDAction)
 	g.POST("/create", CreateUserAction)
 	g.PUT("/edit", EditUserAction)
+	g.GET("/history", GetUserHistoryAction)
 	return nil
 }
 
@@ -148,6 +149,26 @@ func EditUserAction(c echo.Context) error {
 		return api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
 			Message: fmt.Sprintf("user_controller.go/EditUserAction: Error inserting topic %s", updateErr.Error()),
+		})
+	}
+	return nil
+}
+
+func GetUserHistoryAction(c echo.Context) error {
+	id := c.QueryParam("id")
+	userId, _ := strconv.ParseInt(id, 10, 64)
+	result, err := repo.GetResultByUserID(userId)
+	if err != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("user_controller.go/GetUserHistoryAction: Error finding result %s", err.Error()),
+		})
+		return err
+	} else {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Ok,
+			Message: "Success",
+			Data:    result,
 		})
 	}
 	return nil
