@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -97,6 +96,5 @@ func GetContentText(c echo.Context) string {
 	if c.Request().Body != nil {
 		bodyBytes, _ = ioutil.ReadAll(c.Request().Body)
 	}
-	fmt.Println(string(bodyBytes))
 	return string(bodyBytes)
 }

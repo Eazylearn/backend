@@ -9,16 +9,19 @@ import (
 )
 
 func RootControllerGroup(g *echo.Group) error {
-	g.GET("", hello)
-	g.POST("", hello)
-	g.HEAD("", hello)
+	g.POST("login", LoginAction)
 	return nil
 }
 
-func hello(c echo.Context) error {
-	api.Respond(c, &enum.APIResponse{
-		Status: enum.APIStatus.Ok,
-		Message: fmt.Sprintf("Hello World!"),
-	})
+func LoginAction(c echo.Context) error {
+	var body map[string]interface{}
+	err := api.GetContent(c, &body)
+	fmt.Println(body)
+	if err != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: "root_controller.go/LoginAction: Can not parse input data",
+		})
+	}
 	return nil
 }
