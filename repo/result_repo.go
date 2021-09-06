@@ -23,7 +23,7 @@ func CreateResult(result model.Result) error {
 func GetResultByUserID(userId int64) ([]model.Result, error) {
 	list := make([]model.Result, 0)
 	result, err := model.ResultDB.Collection.Find(context.TODO(), bson.M{"userId": userId})
-
+	//println(list[0].TestID)
 	if err != nil {
 		log.Println("result_repo/GetResultByUserID: error encoding ", err.Error())
 		return list, err
@@ -63,10 +63,10 @@ func GetUserHistoryResult(result model.Result) ([]model.Result, error) {
 		log.Println("result_repo/GetUserHistoryResult: error encoding result ", rErr.Error())
 		return listResult, rErr
 	}
-	/*for i := 0; i < len(listResult); i++ {
+	for i := 0; i < len(listResult); i++ {
 		if listResult[i].TimeStart.Before(result.TimeStart) || listResult[i].TimeEnd.After(result.TimeEnd) {
 			listResult = append(listResult[:i], listResult[i+1:]...)
 		}
-	}*/
+	}
 	return listResult, nil
 }
