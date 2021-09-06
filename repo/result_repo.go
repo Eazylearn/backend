@@ -11,6 +11,7 @@ import (
 
 func CreateResult(result model.Result) error {
 	//result.TotalCorrect = GetTestTotalCorrect(result.TestID, result.Answer)
+	GetResultScore(result)
 	_, err := model.ResultDB.Collection.InsertOne(context.TODO(), result)
 	if err != nil {
 		log.Println("result_repo/CreateResult: ", err.Error())
