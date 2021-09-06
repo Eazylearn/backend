@@ -6,6 +6,7 @@ import (
 
 	"github.com/CS426FinalProject/model"
 	"go.mongodb.org/mongo-driver/bson"
+	"math"
 )
 
 func CreateResult(result model.Result) error {
@@ -48,7 +49,7 @@ func GetResultScore(result model.Result) float64 {
 
 	totalQuestion, _ := GetTestTotalQuestion(result.TestID)
 	if totalQuestion != 0 {
-		return float64(result.TotalCorrect) / float64(totalQuestion)
+		return math.Round(float64(result.TotalCorrect)*10 / float64(totalQuestion))
 	}
 	//score = float64(result.TotalCorrect * 10 / totalQuestion)
 
