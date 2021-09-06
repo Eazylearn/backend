@@ -13,7 +13,7 @@ import (
 // ********** Main function for managing path ********** //
 func ResultControllerGroup(g *echo.Group) error {
 	g.POST("/submit", SubmitTestAction)
-	g.GET("/score", GetResultScoreAction)
+	//g.GET("/score", GetResultScoreAction)
 	g.GET("/user", GetResultByUserIDAction)
 	g.POST("/history", GetUserHistoryResultAction)
 	return nil
@@ -41,6 +41,7 @@ func SubmitTestAction(c echo.Context) error {
 
 	return nil
 }
+
 func GetResultScoreAction(c echo.Context) error {
 	var body model.Result
 	err := api.GetContent(c, &body)
@@ -51,6 +52,13 @@ func GetResultScoreAction(c echo.Context) error {
 		})
 	}
 
+	/*iErr := repo.Get(body)
+	if iErr != nil {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: fmt.Sprintf("result_controller.go/SubmitTestAction: Can not create result %s", err),
+		})
+	}*/
 	repo.GetResultScore(body)
 	return nil
 
