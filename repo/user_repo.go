@@ -65,6 +65,7 @@ func GetProfileByID(id int64) (model.Profile, error) {
 	if profile.TotalTest != 0 {
 		profile.AverageScore /= float64(profile.TotalTest)
 	}
+	profile.Username = user.Username
 	return profile, nil
 }
 
