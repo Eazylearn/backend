@@ -175,13 +175,8 @@ func GetUserHistoryAction(c echo.Context) error {
 	}
 	userId, _ := strconv.ParseInt(id, 10, 64)
 	layout := time.Time.String(time.Now()) //"2006-01-02 15:04:05.999999999 -0700 MST" //"2006-01-02T15:04:05.000Z"
-	var timeStart, timeEnd time.Time
-	if Start != "" {
-		timeStart, _ = time.Parse(layout, Start)
-	}
-	if End != "" {
-		timeEnd, _ = time.Parse(layout, End)
-	}
+	timeStart, _ := time.Parse(layout, Start)
+	timeEnd, _ := time.Parse(layout, End)
 	result, err := repo.GetResultByUserID(userId, timeStart, timeEnd)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
