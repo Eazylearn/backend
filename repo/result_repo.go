@@ -31,7 +31,7 @@ func CreateResult(result model.Result) error {
 	return nil
 }
 
-func GetResultByUserID(userId int64) ([]model.Result, error) {
+func GetResultByUserID(userId int64, timeStart time.Time, timeEnd time.Time) ([]model.Result, error) {
 	list := make([]model.Result, 0)
 	result, err := model.ResultDB.Collection.Find(context.TODO(), bson.M{"userId": userId})
 	//println(list[0].TestID)
@@ -39,7 +39,25 @@ func GetResultByUserID(userId int64) ([]model.Result, error) {
 		log.Println("result_repo/GetResultByUserID: error encoding ", err.Error())
 		return list, err
 	}
+
 	result.All(context.TODO(), &list)
+	listResult := make([]model.Result, 0)
+	if timeEnd.Before(timeStart) {
+		//log.Printf("1")
+		return listResult, nil
+
+		//log.Printf("1")
+	}
+
+	if (timeEnd == time.Time{}) {
+		timeEnd = time.Now()
+		//log.Printf("2")
+	}
+	for i := 0; i < len(list); i++ {
+		if list[i].TimeStart.Before(timeStart) || list[i].TimeEnd.After(timeEnd) {
+			listResult = append(listResult[:i], listResult[i+1:]...)
+		}
+	}
 	return list, nil
 }
 
@@ -53,7 +71,8 @@ func GetResultScore(result model.Result) float64 {
 
 	return -1
 }
-func GetUserHistoryResult(result model.Result) ([]model.Result, error) {
+
+/*func GetUserHistoryResult(result model.Result) ([]model.Result, error) {
 	listResult := make([]model.Result, 0)
 	if result.TimeEnd.Before(result.TimeStart) {
 		//log.Printf("1")
@@ -78,3 +97,4 @@ func GetUserHistoryResult(result model.Result) ([]model.Result, error) {
 	}
 	return listResult, nil
 }
+*/

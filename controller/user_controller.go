@@ -9,6 +9,7 @@ import (
 	"github.com/CS426FinalProject/model"
 	"github.com/CS426FinalProject/repo"
 	"github.com/labstack/echo/v4"
+	"time"
 )
 
 // server.Echo.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
@@ -163,8 +164,20 @@ func EditUserAction(c echo.Context) error {
 
 func GetUserHistoryAction(c echo.Context) error {
 	id := c.QueryParam("id")
+	Start := c.QueryParams().Get("timeStart")
+	End := c.QueryParams().Get("timeEnd")
+	if id == "" {
+		return api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Invalid,
+			Message: "question_controller/GetAllQuestionByTopicIdAction: Empty ID",
+		})
+
+	}
 	userId, _ := strconv.ParseInt(id, 10, 64)
-	result, err := repo.GetResultByUserID(userId)
+	layout := time.Time.String(time.Now()) //"2006-01-02 15:04:05.999999999 -0700 MST" //"2006-01-02T15:04:05.000Z"
+	timeStart, _ := time.Parse(layout, Start)
+	timeEnd, _ := time.Parse(layout, End)
+	result, err := repo.GetResultByUserID(userId, timeStart, timeEnd)
 	if err != nil {
 		api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Error,
