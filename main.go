@@ -27,12 +27,6 @@ func main() {
 	server.Start(PORT)
 }
 
-// Set middleware with authorization
-// func setMiddleware(server *api.APIServer) {
-// 	server.Echo.Use(middleware.Logger())
-// 	server.Echo.Use(middleware.Recover())
-// }
-
 // Create path
 func createPath(server *api.APIServer) {
 	server.SetGroup("/", controller.RootControllerGroup)
