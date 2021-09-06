@@ -9,12 +9,12 @@ import (
 
 type Result struct {
 	// Basic information
-	TimeStart time.Time `json:"timeStart" json:"timeStart"`
-	TimeEnd   time.Time `json:"timeEnd" json:"timeEnd"`
+	TimeStart time.Time `json:"timeStart,omitempty" bson:"timeStart,omitempty"`
+	TimeEnd   time.Time `json:"timeEnd,omitempty" bson:"timeEnd,omitempty"`
 
 	// Relative information
-	Answer       [100]string `json:"answer" bson:"answer"`
-	TotalCorrect int32       `json:"totalCorrect" bson:"totalCorrect"`
+	Answer       [100]string `json:"answer,omitempty" bson:"answer,omitempty"`
+	TotalCorrect int32       `json:"totalCorrect,omitempty" bson:"totalCorrect,omitempty"`
 	//TotalTime    int64       `json:"totalTime" json:"totalTime"`
 
 	// Foreign keys
