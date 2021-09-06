@@ -11,8 +11,18 @@ import (
 
 func CreateResult(result model.Result) error {
 	//result.TotalCorrect = GetTestTotalCorrect(result.TestID, result.Answer)
-	GetResultScore(result)
-	_, err := model.ResultDB.Collection.InsertOne(context.TODO(), result)
+
+	//temp.TotalCorrect,_  =GetTestTotalCorrect(result.TestID,result.Answer[:])
+	temp := model.Result{
+		TimeStart: result.TimeStart,
+		TimeEnd:   result.TimeEnd,
+		Answer:    result.Answer,
+		//TotalCorrect: 0,
+		UserID: result.UserID,
+		TestID: result.TestID,
+	}
+	temp.TotalCorrect, _ = GetTestTotalCorrect(result.TestID, result.Answer[:])
+	_, err := model.ResultDB.Collection.InsertOne(context.TODO(), temp)
 	if err != nil {
 		log.Println("result_repo/CreateResult: ", err.Error())
 		return err
@@ -34,16 +44,14 @@ func GetResultByUserID(userId int64) ([]model.Result, error) {
 }
 
 func GetResultScore(result model.Result) float64 {
-	var score float64
-	score = 0
 
-	totalQuestion, _ := GetTestTotalCorrect(result.TestID, result.Answer[:])
+	totalQuestion, _ := GetTestTotalQuestion(result.TestID)
 	if totalQuestion != 0 {
-		score = float64(result.TotalCorrect) / float64(totalQuestion)
+		return float64(result.TotalCorrect) / float64(totalQuestion)
 	}
-	score = float64(result.TotalCorrect * 10 / totalQuestion)
+	//score = float64(result.TotalCorrect * 10 / totalQuestion)
 
-	return score
+	return -1
 }
 func GetUserHistoryResult(result model.Result) ([]model.Result, error) {
 	listResult := make([]model.Result, 0)
