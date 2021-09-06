@@ -3,7 +3,6 @@ package repo
 import (
 	"context"
 	"log"
-	"time"
 
 	"github.com/CS426FinalProject/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -31,7 +30,7 @@ func CreateResult(result model.Result) error {
 	return nil
 }
 
-func GetResultByUserID(userId int64, timeStart time.Time, timeEnd time.Time) ([]model.Result, error) {
+func GetResultByUserID(userId int64) ([]model.Result, error) {
 	list := make([]model.Result, 0)
 	result, err := model.ResultDB.Collection.Find(context.TODO(), bson.M{"userId": userId})
 	//println(list[0].TestID)
@@ -41,23 +40,7 @@ func GetResultByUserID(userId int64, timeStart time.Time, timeEnd time.Time) ([]
 	}
 
 	result.All(context.TODO(), &list)
-	listResult := make([]model.Result, 0)
-	if timeEnd.Before(timeStart) {
-		//log.Printf("1")
-		return listResult, nil
 
-		//log.Printf("1")
-	}
-
-	if (timeEnd == time.Time{}) {
-		timeEnd = time.Now()
-		//log.Printf("2")
-	}
-	for i := 0; i < len(list); i++ {
-		if list[i].TimeStart.Before(timeStart) || list[i].TimeEnd.After(timeEnd) {
-			listResult = append(listResult[:i], listResult[i+1:]...)
-		}
-	}
 	return list, nil
 }
 
