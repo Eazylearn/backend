@@ -15,7 +15,7 @@ func ResultControllerGroup(g *echo.Group) error {
 	g.POST("/submit", SubmitTestAction)
 	g.GET("/score", GetResultScoreAction)
 	g.GET("/user", GetResultByUserIDAction)
-	g.GET("/history", GetResultByUserIDAction)
+	g.GET("/history", GetUserHistoryResultAction)
 	return nil
 }
 
