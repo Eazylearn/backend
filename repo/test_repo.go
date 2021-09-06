@@ -170,7 +170,7 @@ func GetTestTotalQuestion(TestID int64) (int64, error) {
 
 	return test.TotalQuestion, nil
 }
-func GetTestTotalCorrect(TestID int64, Answers []string) (int64, error) {
+func GetTestTotalCorrect(TestID int64, Answers []string) (int32, error) {
 	var test model.Test
 	err := model.TestDB.Collection.FindOne(context.TODO(), bson.M{"TestId": TestID}).Decode(&test)
 
@@ -179,7 +179,7 @@ func GetTestTotalCorrect(TestID int64, Answers []string) (int64, error) {
 		return 0, err
 	}
 	var questions []model.Question = test.Questions
-	var score int64 = 0
+	var score int32 = 0
 	for i := 0; i < len(questions); i++ {
 		var qAnswer string = strings.TrimSpace(questions[i].Answer)
 		if qAnswer == strings.TrimSpace(Answers[i]) {
