@@ -2,10 +2,9 @@ package repo
 
 import (
 	"context"
-	"log"
-
 	"github.com/CS426FinalProject/model"
 	"go.mongodb.org/mongo-driver/bson"
+	"log"
 )
 
 func CreateResult(result model.Result) error {
@@ -35,7 +34,7 @@ func GetResultScore(result model.Result) float64 {
 	score = 0
 
 	totalQuestion, _ := GetTestTotalQuestion(result.TestID)
-	result.TotalCorrect = 0
+	result.TotalCorrect, _ = GetTestTotalCorrect(result.TestID, result.Answer[:])
 	if totalQuestion == 0 {
 		return -1
 	}
@@ -43,4 +42,18 @@ func GetResultScore(result model.Result) float64 {
 	score = float64(result.TotalCorrect) / float64(totalQuestion)
 
 	return score
+}
+func GetUserHistoryResult(result model.Result) ([]model.Result, error) {
+	listResult := make([]model.Result, 0)
+	listResult, rErr := GetResultByUserID(result.UserID)
+	if rErr != nil {
+		log.Println("result_repo/GetUserHistoryResult: error encoding result ", rErr.Error())
+		return listResult, rErr
+	}
+	for i := 0; i < len(listResult); i++ {
+		if listResult[i].TimeStart.Before(result.TimeStart) || listResult[i].TimeEnd.After(result.TimeEnd) {
+			listResult = append(listResult[:i], listResult[i+1:]...)
+		}
+	}
+	return listResult, nil
 }
