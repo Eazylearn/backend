@@ -119,7 +119,7 @@ func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	if query.Name != "" {
 		filter["Name"] = query.Name
 	}
-	if query.TestId != 0 {
+	if query.TestId != "" {
 		filter["TestId"] = query.TestId
 	}
 	if query.Level != 0 {
@@ -159,7 +159,7 @@ func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	}
 	return list, nil
 }
-func GetTestTotalQuestion(TestID int64) (int32, error) {
+func GetTestTotalQuestion(TestID string) (int32, error) {
 	var test model.Test
 	err := model.TestDB.Collection.FindOne(context.TODO(), bson.M{"TestId": TestID}).Decode(&test)
 
@@ -170,7 +170,7 @@ func GetTestTotalQuestion(TestID int64) (int32, error) {
 
 	return int32(test.TotalQuestion), nil
 }
-func GetTestTotalCorrect(TestID int64, Answers []string) (int32, error) {
+func GetTestTotalCorrect(TestID string, Answers []string) (int32, error) {
 	var test model.Test
 	err := model.TestDB.Collection.FindOne(context.TODO(), bson.M{"TestId": TestID}).Decode(&test)
 

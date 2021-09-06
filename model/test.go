@@ -7,7 +7,7 @@ import (
 
 type PostTest struct {
 	// Basic information of test
-	TestId    int64  `json:"testId,omitempty" bson:"testId,omitempty"`
+	TestId    string `json:"testId,omitempty" bson:"testId,omitempty"`
 	Name      string `json:"name,omitempty" bson:"Name,omitempty"`
 	SubjectId string `json:"subjectId,omitempty"  bson:"SubjectId,omitempty"`
 	// Relative information of test
@@ -21,7 +21,7 @@ type PostTest struct {
 }
 type Test struct {
 	// Basic information of test
-	TestId int64  `json:"testId,omitempty" bson:"TestId,omitempty"`
+	TestId string `json:"testId,omitempty" bson:"TestId,omitempty"`
 	Name   string `json:"name,omitempty" bson:"Name,omitempty"`
 
 	// Relative information of test
