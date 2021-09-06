@@ -18,8 +18,8 @@ type Result struct {
 	//TotalTime    int64       `json:"totalTime" json:"totalTime"`
 
 	// Foreign keys
-	UserID int64 `json:"userId,omitempty" bson:"userId,omitempty"`
-	TestID int64 `json:"testId,omitempty" bson:"testId,omitempty"`
+	UserID int64  `json:"userId,omitempty" bson:"userId,omitempty"`
+	TestID string `json:"testId,omitempty" bson:"testId,omitempty"`
 }
 
 var ResultDB = &db.Instance{
