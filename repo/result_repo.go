@@ -36,10 +36,9 @@ func GetResultScore(result model.Result) float64 {
 	var score float64
 	score = 0
 
-	totalQuestion, _ := GetTestTotalQuestion(result.TestID)
-	result.TotalCorrect, _ = GetTestTotalCorrect(result.TestID, result.Answer[:])
-	if totalQuestion == 0 {
-		return -1
+	totalQuestion, _ := GetTestTotalCorrect(result.TestID, result.Answer[:])
+	if totalQuestion != 0 {
+		score = float64(result.TotalCorrect) / float64(totalQuestion)
 	}
 	score = float64(result.TotalCorrect * 10 / totalQuestion)
 

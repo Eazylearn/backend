@@ -38,16 +38,24 @@ func LoginAction(c echo.Context) error {
 	}
 	if !exist {
 		api.Respond(c, &enum.APIResponse{
-			Status:  enum.APIStatus.Ok,
+			Status:  enum.APIStatus.Unauthorized,
 			Message: "Fail to login",
 			Data:    exist,
+		})
+		return nil
+	}
+	token, tErr := api.CreateToken(username, id)
+	if tErr != nil {
+		api.Respond(c, &enum.APIResponse{
+			Status:  enum.APIStatus.Error,
+			Message: fmt.Sprintf("root_controller.go/LoginAction: Error creating token %s", tErr.Error()),
 		})
 		return nil
 	}
 	api.Respond(c, &enum.APIResponse{
 		Status:  enum.APIStatus.Ok,
 		Message: "Success",
-		Data:    id,
+		Data:    token,
 	})
 	return nil
 }

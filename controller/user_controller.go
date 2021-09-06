@@ -11,8 +11,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// server.Echo.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+// 	return repo.IsUserExist(username, password)
+// }))
+
 // ********** Main function for managing path ********** //
 func UserControllerGroup(g *echo.Group) error {
+	// g.Use(middleware.JWTWithConfig(middleware.DefaultJWTConfig{
+
+	// }))
 	g.GET("/profile", GetProfileAction)
 	g.GET("/find", GetUserByIDAction)
 	g.POST("/create", CreateUserAction)

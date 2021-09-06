@@ -19,11 +19,19 @@ func main() {
 	server := api.InitServer()
 	godotenv.Load(".env")
 	DB_URI := os.Getenv("DB_URI")
+	PORT := ":" + os.Getenv("PORT")
 	AppDB := db.CreateUniversalDB(DB_URI, "eazylearn")
 	onDBConnected(AppDB)
 	createPath(server)
-	server.Start(":8081")
+	// setMiddleware(server)
+	server.Start(PORT)
 }
+
+// Set middleware with authorization
+// func setMiddleware(server *api.APIServer) {
+// 	server.Echo.Use(middleware.Logger())
+// 	server.Echo.Use(middleware.Recover())
+// }
 
 // Create path
 func createPath(server *api.APIServer) {
