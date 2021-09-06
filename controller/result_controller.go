@@ -7,15 +7,16 @@ import (
 	"github.com/CS426FinalProject/model"
 	"github.com/CS426FinalProject/repo"
 	"github.com/labstack/echo/v4"
-	"strconv"
+	//"strconv"
+	//"time"
 )
 
 // ********** Main function for managing path ********** //
 func ResultControllerGroup(g *echo.Group) error {
 	g.POST("/submit", SubmitTestAction)
 	//g.GET("/score", GetResultScoreAction)
-	g.GET("/user", GetResultByUserIDAction)
-	g.POST("/history", GetUserHistoryResultAction)
+	//g.GET("/user", GetResultByUserIDAction)
+	//g.POST("/history", GetUserHistoryResultAction)
 	return nil
 }
 
@@ -63,8 +64,11 @@ func GetResultScoreAction(c echo.Context) error {
 	return nil
 
 }
-func GetResultByUserIDAction(c echo.Context) error {
+
+/*func GetResultByUserIDAction(c echo.Context) error {
 	userId := c.QueryParams().Get("userId")
+	Start:=c.QueryParams().Get("timeStart")
+    End:=c.QueryParams().Get("timeEnd")
 	if userId == "" {
 		return api.Respond(c, &enum.APIResponse{
 			Status:  enum.APIStatus.Invalid,
@@ -72,6 +76,9 @@ func GetResultByUserIDAction(c echo.Context) error {
 		})
 
 	}
+	layout := "2006-01-02T15:04:05.000Z"
+	timeStart,_:= time.Parse(layout,Start)
+	timeEnd,_:=time.Parse(layout,End)
 	var id int64
 	id, errConv := strconv.ParseInt(userId, 10, 0)
 	if errConv != nil {
@@ -93,8 +100,8 @@ func GetResultByUserIDAction(c echo.Context) error {
 		Message: fmt.Sprintf("Success"),
 	})
 	return nil
-}
-func GetUserHistoryResultAction(c echo.Context) error {
+}*/
+/*func GetUserHistoryResultAction(c echo.Context) error {
 	var body model.Result
 	err := api.GetContent(c, &body)
 	if err != nil {
@@ -117,4 +124,4 @@ func GetUserHistoryResultAction(c echo.Context) error {
 	})
 	return nil
 
-}
+}*/
