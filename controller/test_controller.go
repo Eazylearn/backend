@@ -46,7 +46,7 @@ func CreateTestAction(c echo.Context) error {
 	return nil
 }
 func CreateTestByBEAction(c echo.Context) error {
-	var body []model.PostTest
+	var body model.PostTest
 	err := api.GetContent(c, &body)
 	if err != nil {
 		return api.Respond(c, &enum.APIResponse{

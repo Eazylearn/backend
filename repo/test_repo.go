@@ -47,7 +47,7 @@ func FindInCollection(filter bson.M, collection string) (*mongo.Cursor, error) {
 	//_, err := model.Test_ENGDB.Collection.InsertOne(context.TODO(), test)
 }
 */
-func CreateTestByBE(test []model.PostTest) error {
+/*func CreateTestByBE(test []model.PostTest) error {
 	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
 	for i := 0; i < len(test); i++ {
 		var questionArray []int64 = test[i].Questions[0:]
@@ -84,6 +84,44 @@ func CreateTestByBE(test []model.PostTest) error {
 		}
 
 	}
+	return nil
+}*/
+func CreateTestByBE(test model.PostTest) error {
+	// return &Test{testId: 1, Name: "New test", totalQuestion: 0, topicId: 1}
+
+	var questionArray []int64 = test.Questions[0:]
+	list := make([]model.Question, 0)
+	//questions:= []model.Question{}
+	for i := 0; i < len(questionArray); i++ {
+		var a int64 = questionArray[i]
+		questions, qErr := GetQuestioByIndex(a)
+		if qErr != nil {
+
+			log.Println("test_repo.go/CreateTest: Error finding QuestionID   "+strconv.FormatInt(a, 10), qErr.Error())
+		}
+		list = append(list, questions)
+	}
+
+	body := model.Test{
+		TestId:        test.TestId,
+		Name:          test.Name,
+		TotalQuestion: test.TotalQuestion,
+		Subject:       test.Subject,
+		Questions:     list,
+		TopicId:       test.TopicId,
+		Level:         test.Level,
+		Type:          test.Type,
+		SubjectId:     test.SubjectId,
+	}
+	sort.Strings(body.TopicId)
+	//err := InsertToCollection(body, body.Subject) //
+
+	_, err := model.TestDB.Collection.InsertOne(context.TODO(), body)
+	if err != nil {
+		log.Println("test_repo.go/CreateTest: Error Inserting", err.Error())
+		return err
+	}
+
 	return nil
 }
 func CreateTest(test model.Test) error {
