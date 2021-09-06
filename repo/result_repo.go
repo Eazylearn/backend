@@ -33,14 +33,11 @@ func GetResultByUserID(userId int64) ([]model.Result, error) {
 func GetResultScore(result model.Result) float64 {
 	var score float64
 	score = 0
-
-	totalQuestion, _ := GetTestTotalQuestion(result.TestID)
-	result.TotalCorrect = 0
-	if totalQuestion == 0 {
-		return -1
+  
+	totalQuestion := GetTestTotalQuestion(result.TestID)
+	if totalQuestion != 0 {
+		score = float64(result.TotalCorrect) / float64(totalQuestion)
 	}
-
-	score = float64(result.TotalCorrect) / float64(totalQuestion)
 
 	return score
 }
