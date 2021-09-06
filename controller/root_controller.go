@@ -11,6 +11,17 @@ import (
 
 func RootControllerGroup(g *echo.Group) error {
 	g.POST("login", LoginAction)
+	g.POST("", hello)
+	g.GET("", hello)
+	g.PUT("", hello)
+	return nil
+}
+
+func hello(c echo.Context) error {
+	api.Respond(c, &enum.APIResponse{
+		Status: enum.APIStatus.Ok,
+		Message: "Welcome to Eazylearn app",
+	})
 	return nil
 }
 
