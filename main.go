@@ -1,11 +1,16 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
 	"github.com/CS426FinalProject/api"
 	"github.com/CS426FinalProject/controller"
 	"github.com/CS426FinalProject/db"
+	"github.com/dgrijalva/jwt-go"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	// "github.com/CS426FinalProject/enum"
 	"github.com/CS426FinalProject/model"
@@ -23,15 +28,9 @@ func main() {
 	AppDB := db.CreateUniversalDB(DB_URI, "eazylearn")
 	onDBConnected(AppDB)
 	createPath(server)
-	// setMiddleware(server)
+	setMiddleware(server)
 	server.Start(PORT)
 }
-
-// Set middleware with authorization
-// func setMiddleware(server *api.APIServer) {
-// 	server.Echo.Use(middleware.Logger())
-// 	server.Echo.Use(middleware.Recover())
-// }
 
 // Create path
 func createPath(server *api.APIServer) {
@@ -42,6 +41,38 @@ func createPath(server *api.APIServer) {
 	server.SetGroup("/question", controller.QuestionControllerGroup)
 	server.SetGroup("/result", controller.ResultControllerGroup)
 	server.SetGroup("/subject", controller.SubjectControllerGroup)
+}
+
+// Set middleware
+func setMiddleware(server *api.APIServer) {
+	server.Echo.Use(middleware.Logger())
+	server.Echo.Use(middleware.Recover())
+
+	r := server.Echo.Group("/user")
+
+	config := middleware.JWTConfig{
+		TokenLookup: api.GetHeaderText(server.Echo.AcquireContext()),
+		ParseTokenFunc: func(auth string, c echo.Context) (interface{}, error) {
+			keyFunc := func(t *jwt.Token) (interface{}, error) {
+				if t.Method.Alg() != "HS256" {
+					return nil, fmt.Errorf("unexpected jwt signing method=%v", t.Header["alg"])
+				}
+				signingKey := []byte("secret")
+				return signingKey, nil
+			}
+
+			token, err := jwt.Parse(auth, keyFunc)
+			if err != nil {
+				return nil, err
+			}
+			if !token.Valid {
+				return nil, errors.New("invalid token")
+			}
+			return token, nil
+		},
+	}
+
+	r.Use(middleware.JWTWithConfig(config))
 }
 
 // Connect to database

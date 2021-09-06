@@ -17,9 +17,6 @@ import (
 
 // ********** Main function for managing path ********** //
 func UserControllerGroup(g *echo.Group) error {
-	// g.Use(middleware.JWTWithConfig(middleware.DefaultJWTConfig{
-
-	// }))
 	g.GET("/profile", GetProfileAction)
 	g.GET("/find", GetUserByIDAction)
 	g.POST("/create", CreateUserAction)

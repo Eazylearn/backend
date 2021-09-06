@@ -1,10 +1,8 @@
 package api
 
 import (
-	"crypto/rsa"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 
@@ -103,16 +101,11 @@ func GetContentText(c echo.Context) string {
 }
 
 func GetHeaderText(c echo.Context) string {
-	token := c.Request().Header["token"][0]
+	token := c.Request().Header.Get("token")
 	return token
 }
 
 // Token
-
-var (
-	signKey   *rsa.PrivateKey
-	verifyKey *rsa.PublicKey
-)
 
 type jwtUserClaims struct {
 	Username string
@@ -130,9 +123,11 @@ func CreateToken(username string, userID int64) (string, error) {
 		},
 	}
 
-	t := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := t.SignedString(signKey)
+	signingKey := []byte("secret")
+
+	tokenString, err := t.SignedString(signingKey)
 	if err != nil {
 		return token, err
 	}
@@ -140,20 +135,4 @@ func CreateToken(username string, userID int64) (string, error) {
 	token = tokenString
 
 	return token, nil
-}
-
-func CheckTokenValid(tokenString string) (bool, error) {
-	token, err := jwt.ParseWithClaims(tokenString, jwtUserClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return verifyKey, nil
-	})
-
-	if err != nil {
-		return false, err
-	}
-
-	claims := token.Claims.(*jwtUserClaims)
-
-	log.Println(claims.Username, claims.UserID)
-
-	return true, nil
 }
