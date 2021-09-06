@@ -2,7 +2,7 @@ module github.com/CS426FinalProject
 
 go 1.16
 
-// +heroku goVersion go1.11
+// +heroku goVersion go1.16
 
 require (
 	github.com/joho/godotenv v1.3.0
