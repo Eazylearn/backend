@@ -159,7 +159,7 @@ func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	}
 	return list, nil
 }
-func GetTestTotalQuestion(TestID int64) (int64, error) {
+func GetTestTotalQuestion(TestID int64) (int32, error) {
 	var test model.Test
 	err := model.TestDB.Collection.FindOne(context.TODO(), bson.M{"TestId": TestID}).Decode(&test)
 
@@ -168,7 +168,7 @@ func GetTestTotalQuestion(TestID int64) (int64, error) {
 		return 0, err
 	}
 
-	return test.TotalQuestion, nil
+	return int32(test.TotalQuestion), nil
 }
 func GetTestTotalCorrect(TestID int64, Answers []string) (int32, error) {
 	var test model.Test
