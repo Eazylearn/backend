@@ -10,7 +10,7 @@ import (
 
 // ********** Main function for managing path ********** //
 func ResultControllerGroup(g *echo.Group) error {
-	g.GET("/submit", SubmitTestAction)
+	g.POST("/submit", SubmitTestAction)
 	return nil
 }
 
