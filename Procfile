@@ -1,1 +1,1 @@
-web: eazylearn.exe
+web: ./eazylearn.exe
