@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"log"
-	"time"
 
 	"github.com/CS426FinalProject/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -41,7 +40,7 @@ func CreateUser(users []model.User) ([]model.User, error) {
 func GetProfileByID(id int64) (model.Profile, error) {
 	var profile model.Profile
 	user, uErr := GetUserByID(id)
-	result, rErr := GetResultByUserID(id, time.Time{}, time.Now())
+	result, rErr := GetResultByUserID(id)
 	if uErr != nil {
 		log.Println("user_repo.go/FindUserByID: Error finding user", uErr.Error())
 		return profile, uErr
