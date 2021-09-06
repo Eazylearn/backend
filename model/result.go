@@ -13,13 +13,13 @@ type Result struct {
 	TimeEnd   time.Time `json:"timeEnd,omitempty" bson:"timeEnd,omitempty"`
 
 	// Relative information
-	Answer       [100]string `json:"answer,omitempty" bson:"answer,omitempty"`
-	TotalCorrect int32       `json:"totalCorrect,omitempty" bson:"totalCorrect,omitempty"`
+	Answer       []string `json:"answer,omitempty" bson:"answer,omitempty"`
+	TotalCorrect int32    `json:"totalCorrect,omitempty" bson:"totalCorrect,omitempty"`
 	//TotalTime    int64       `json:"totalTime" json:"totalTime"`
 
 	// Foreign keys
-	UserID int64 `json:"userId"`
-	TestID int64 `json:"testId"`
+	UserID int64  `json:"userId,omitempty" bson:"userId,omitempty"`
+	TestID string `json:"testId,omitempty" bson:"testId,omitempty"`
 }
 
 var ResultDB = &db.Instance{
