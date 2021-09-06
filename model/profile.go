@@ -14,7 +14,10 @@ type Profile struct {
 	Phone     string `json:"phone" bson:"phone"`
 
 	// Relative information
-	Dob          time.Time `json:"dob,omitempty" bson:"dob,omitempty"`
+	Dob          time.Time `json:"dob" bson:"dob"`
 	AverageScore float64   `json:"avgScore" bson:"avgScore"`
 	TotalTest    int       `json:"totalTest" bson:"totalTest"`
+
+	// Account
+	Username string `json:"username" bson:"username"`
 }

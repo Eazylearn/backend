@@ -105,7 +105,7 @@ func RemoveIndex(s []model.Test, index int) []model.Test {
 func GetAllTestByQuery(query *model.Test) ([]model.Test, error) {
 	filter := bson.M{}
 	list := make([]model.Test, 0)
-	if (query.Subject == "" || query.SubjectId == "") && len(query.TopicId) != 0 {
+	if query.Subject == "" && query.SubjectId == "" && len(query.TopicId) != 0 {
 		return list, nil
 	}
 	if query.Subject != "" {
