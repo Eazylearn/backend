@@ -1,1 +1,1 @@
-web: bin\eazylearn.exe
+web: eazylearn.exe
